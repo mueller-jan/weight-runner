@@ -6,8 +6,7 @@ var Runner = function() {
     this.music = null;
 };
 
-//function die den Bootstate enthält
-Runner.Boot = function(game) {};
+Runner.Boot = function() {};
 
 Runner.Boot.prototype = {
     preload: function() {

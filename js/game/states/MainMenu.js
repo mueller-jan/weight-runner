@@ -1,6 +1,6 @@
 'use strict';
 
-Runner.MainMenu = function(game) {
+Runner.MainMenu = function() {
     this.background = null;
     this.player = null;
     this.playButton = null;
@@ -8,7 +8,7 @@ Runner.MainMenu = function(game) {
 
 Runner.MainMenu.prototype = {
     create : function() {
-        this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background')
+        this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
         this.background.autoScroll(-100,0);
 
         this.midground = this.game.add.tileSprite(0, 470, this.game.width, this.game.height - 85, 'midground');

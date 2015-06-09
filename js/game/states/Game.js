@@ -1,11 +1,9 @@
 'use strict';
 
-Runner.Game = function (game) {
+Runner.Game = function () {
     console.log('init');
-    this.player;
-    this.ground;
 };
-var cursors;
+
 Runner.Game.prototype = {
     create: function () {
         // Welt-Grenzen setzen
