@@ -1,3 +1,5 @@
+'use strict';
+
 Runner.MainMenu = function(game) {
     this.background = null;
     this.player = null;

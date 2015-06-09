@@ -1,3 +1,5 @@
+'use strict';
+
 //globale Game-Klasse erzeugen
 //enthält Variablen die erhalten bleiben sollen auch wenn sich der State ändert
 var Runner = function() {

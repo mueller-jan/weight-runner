@@ -1,3 +1,5 @@
+'use strict';
+
 Runner.Game = function (game) {
     console.log('init');
 };
@@ -39,7 +41,7 @@ Runner.Game.prototype = {
 
 
         //Steuerung
-        cursors = this.game.input.keyboard.createCursorKeys();
+        this.cursors = this.game.input.keyboard.createCursorKeys();
 
 
     },

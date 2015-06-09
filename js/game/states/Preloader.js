@@ -1,3 +1,5 @@
+'use strict';
+
 Runner.Preloader = function(game) {
     this.background = null;
     this.preloadBar = null;
