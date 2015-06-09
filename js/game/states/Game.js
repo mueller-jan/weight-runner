@@ -47,6 +47,9 @@ Runner.Game.prototype = {
         //funktioniert nicht
         this.game.physics.arcade.collide(this.player, this.ground);
 
+        // Geschwindigkeit zurücksetzen
+        this.player.body.velocity.x = 0;
+
         if (this.cursors.left.isDown)
         {
             //nach links
