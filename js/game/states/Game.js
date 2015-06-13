@@ -2,16 +2,19 @@
 
 Runner.Game = function () {
     console.log('init');
+    this.spawnPositionX = null;
 };
 
 Runner.Game.prototype = {
     create: function () {
         // Welt-Grenzen setzen
-        this.game.world.bounds = new Phaser.Rectangle(0, 0, this.game.width + 300, this.game.height);
+        this.game.world.bounds = new Phaser.Rectangle(-100, 0, this.game.width + 300, this.game.height);
 
         //Phsysik-System starten
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.game.physics.arcade.gravity.y = 400;
+        this.game.physics.arcade.gravity.y = 600;
+
+        this.spawnPositionX = this.game.width + 64;
 
         //Mittelgrund und Hintergrund
         this.midground = this.game.add.tileSprite(0, 470, this.game.width, this.game.height - 85, 'midground');
@@ -22,11 +25,15 @@ Runner.Game.prototype = {
 
         //Boden
         this.ground = this.game.add.tileSprite(0,this.game.height - 73, this.game.width, 73, 'ground');
-        this.ground.autoScroll(-400,0);
+        this.ground.autoScroll(-200,0);
 
         this.game.physics.arcade.enableBody(this.ground);
         this.ground.body.allowGravity = false;
         this.ground.body.immovable = true;
+
+        //Gruppen erzeugen
+        this.items = this.game.add.group();
+        this.obstacles = this.game.add.group();
 
         //Player
         this.player = this.game.add.sprite(32, this.game.height - 85 - 100, 'player');
@@ -38,15 +45,23 @@ Runner.Game.prototype = {
         this.game.physics.arcade.enableBody(this.player);
         this.player.body.collideWorldBounds = true;
 
+        //Erzeugungs-Loops
+        this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
+        this.itemGenerator.timer.start();
+
+        this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generateObstacles, this);
+        this.obstacleGenerator.timer.start();
+
         this.cursors = this.game.input.keyboard.createCursorKeys();
     },
 
     update: function () {
-        //funktioniert nicht
-        this.game.physics.arcade.collide(this.player, this.ground);
-
         // Geschwindigkeit zurücksetzen
         this.player.body.velocity.x = 0;
+
+        this.game.physics.arcade.collide(this.player, this.ground);
+        this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this);
+
 
         if (this.cursors.left.isDown)
         {
@@ -62,8 +77,60 @@ Runner.Game.prototype = {
         //springen - nur möglich, wenn der Spieler den Boden berührt
         if (this.cursors.up.isDown && this.player.body.touching.down)
         {
-            this.player.body.velocity.y = -350;
+            this.player.body.velocity.y = -250;
         }
+    },
+
+    obstacleHit: function() {
+        //player soll weiter rennen, wenn er ein Hindernis berührt
+        this.player.body.velocity.x = 200;
+    },
+
+    dispose: function() {
+        console.log('disposing scene');
+
+        this.itemGenerator.timer.destroy();
+        this.obstacleGenerator.timer.destroy();
+    },
+
+    generateItems: function() {
+        this.createItem();
+    },
+
+    createItem: function(x, y) {
+        x = x || this.spawnPositionX;
+        y = y || this.game.rnd.integerInRange(this.game.world.height - this.ground.height, this.game.world.height - 192);
+
+        var item = this.items.getFirstExists(false);
+        if (!item) {
+            item = new Item(this.game, 0, 0, 'burger');
+            this.items.add(item);
+        }
+        item.reset(x, y);
+        item.revive();
+        return item;
+    },
+
+    generateObstacles: function() {
+        this.createObstacle();
+    },
+
+    createObstacle: function(x, y) {
+        x = x || this.spawnPositionX;
+        y = y || this.game.world.height - 90;
+
+        var obstacle = this.obstacles.getFirstExists(false);
+        if (!obstacle) {
+            obstacle = new Obstacle(this.game, 0, 0, 'box');
+            this.obstacles.add(obstacle);
+        }
+        obstacle.reset(x, y);
+        obstacle.revive();
+        return obstacle;
+    },
+
+    createObstacleGroup: function(columns, rows) {
+       
     },
 
     render: function() {
