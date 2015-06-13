@@ -37,7 +37,7 @@ Runner.Game.prototype = {
         this.obstacles = this.game.add.group();
 
         //Player
-        this.player = this.game.add.sprite(32, this.game.height - 85 - 100, 'player');
+        this.player = this.game.add.sprite(32, this.game.height - 120, 'player');
 
         //this.player.animations.add('left', [0, 1, 2, 3], 10, true);
         this.player.animations.add('right', [5, 6, 7, 8], 10, true);
@@ -61,6 +61,7 @@ Runner.Game.prototype = {
         this.player.body.velocity.x = 0;
 
         this.game.physics.arcade.collide(this.player, this.ground);
+        this.game.physics.arcade.collide(this.player, this.items, this.itemHit, null, this);
         this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this);
 
 
@@ -85,6 +86,10 @@ Runner.Game.prototype = {
     obstacleHit: function() {
         //player soll weiter rennen, wenn er ein Hindernis berührt
         this.player.body.velocity.x = 200;
+    },
+
+    itemHit: function(player, item) {
+        item.kill();
     },
 
     dispose: function() {
