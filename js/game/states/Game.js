@@ -90,6 +90,13 @@ Runner.Game.prototype = {
 
     itemHit: function(player, item) {
         item.kill();
+
+        var dummyItem = new Item(this.game, item.x, item.y);
+        this.game.add.existing(dummyItem);
+        var itemTween = this.game.add.tween(dummyItem).to({x: 50, y: 50}, 300, Phaser.Easing.Circular.in, true);
+        itemTween.onComplete.add(function() {
+            dummyItem.destroy();
+        }, this);
     },
 
     dispose: function() {
