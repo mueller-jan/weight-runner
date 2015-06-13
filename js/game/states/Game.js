@@ -16,14 +16,15 @@ Runner.Game.prototype = {
 
         this.spawnPositionX = this.game.width + 64;
 
-        //Mittelgrund und Hintergrund
-        this.midground = this.game.add.tileSprite(0, 470, this.game.width, this.game.height - 85, 'midground');
-        this.midground.autoScroll(-100,0);
-
+        //Hintergrund
         this.background = this.game.add.tileSprite(0,0,this.game.width, 512, 'background');
         this.background.autoScroll(-100,0);
 
-        //Boden
+        //Mittelgrund
+        this.midground = this.game.add.tileSprite(0, 420, this.game.width, this.game.height - 85, 'midground');
+        this.midground.autoScroll(-150,0);
+
+        //Vordergrund
         this.ground = this.game.add.tileSprite(0,this.game.height - 73, this.game.width, 73, 'ground');
         this.ground.autoScroll(-200,0);
 
@@ -45,7 +46,7 @@ Runner.Game.prototype = {
         this.game.physics.arcade.enableBody(this.player);
         this.player.body.collideWorldBounds = true;
 
-        //Erzeugungs-Loops
+        //Loops zum Erzeugen von Items und Hindernissen
         this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
         this.itemGenerator.timer.start();
 
@@ -99,8 +100,9 @@ Runner.Game.prototype = {
 
     createItem: function(x, y) {
         x = x || this.spawnPositionX;
-        y = y || this.game.rnd.integerInRange(this.game.world.height - this.ground.height, this.game.world.height - 192);
+        y = y || this.game.rnd.integerInRange(this.game.world.height - 120, this.game.world.height - 192);
 
+        //Items recyclen
         var item = this.items.getFirstExists(false);
         if (!item) {
             item = new Item(this.game, 0, 0, 'burger');
@@ -119,6 +121,7 @@ Runner.Game.prototype = {
         x = x || this.spawnPositionX;
         y = y || this.game.world.height - 90;
 
+        //Obstacles recyclen
         var obstacle = this.obstacles.getFirstExists(false);
         if (!obstacle) {
             obstacle = new Obstacle(this.game, 0, 0, 'box');
@@ -130,7 +133,7 @@ Runner.Game.prototype = {
     },
 
     createObstacleGroup: function(columns, rows) {
-       
+
     },
 
     render: function() {
