@@ -117,7 +117,7 @@ Runner.Game.prototype = {
         //Items recyclen
         var item = this.items.getFirstExists(false);
         if (!item) {
-            item = new Item(this.game, 0, 0, 'burger');
+            item = new Item(this.game, 0, 0);
             this.items.add(item);
         }
         item.reset(x, y);
