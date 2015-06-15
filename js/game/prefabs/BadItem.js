@@ -1,15 +1,9 @@
 'use strict';
-var BadItem = function(game, x, y, frame)
-{
-    var child = this;
-    this.prototype.call()
-
-    Phaser.Sprite.call(this, game, x, y, 'cake');
+var BadItem = function(game, x, y) {
+    Item.call(this, game, x, y, 'bad_items', 1);
+    this.weightValue = 0.5;
 };
 
 BadItem.prototype = Object.create(Item.prototype);
 BadItem.prototype.constructor = BadItem;
 
-BadItem.prototype.onRevived = function() {
-    this.body.velocity.x = -200;
-}

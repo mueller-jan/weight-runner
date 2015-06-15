@@ -20,10 +20,10 @@ Runner.Preloader.prototype = {
         this.load.image('midground', 'assets/images/tiles/midground.png');
         this.load.image('ground', 'assets/images/tiles/ground.png');
 
-        this.load.image('burger', 'assets/images/burger.png');
         this.load.image('box', 'assets/images/box.png');
-        this.load.image('cake', 'assets/images/cake.png');
 
+        this.load.spritesheet('good_items', 'assets/images/good_items.png', 48, 48);
+        this.load.spritesheet('bad_items', 'assets/images/bad_items.png', 48, 48);
         this.load.spritesheet('player', 'assets/images/player.png', 32, 48);
 
 
