@@ -58,15 +58,19 @@ Runner.Game.prototype = {
 
         //Aktuelles Gewicht und Zielgewicht
         this.weight = 200;
+        this.maxWeight = this.weight;
         this.goal = 150;
 
-        //Score und vorheriger Score
-        this.score = 0;
+        //Score und vorheriger Score (benötigt für die Gewichtszählung)
+        this.score = 15;
         this.previousScore = 0;
+
+        //Je nach StartScore wird das Startgewicht aus der Differenz von maxWeight und goal berechnet
+        this.calculateWeight();
 
         //Weighttext
         var style = { font: "20px Arial", fill: "#fff", align: "center" };
-        this.weightText = this.game.add.text(30, 30, "Weight: " + this.weight + " Goal: " + this.goal, style);
+        this.weightText = this.game.add.text(30, 30, "weight: " + this.weight + " Goal: " + this.goal, style);
 
 
     },
@@ -106,20 +110,32 @@ Runner.Game.prototype = {
 
     itemHit: function(player, item) {
         item.kill();
-        this.currentWeight += item.weightValue;
 
-        //Bei itemHit wird der Score hochgezählt
-        this.score += 10;
+        //Der Score wird je nach Item hoch oder runtergezählt
+        this.score += item.scoreValue;
 
-        //Score wird in Gewicht umgerechnet für die Anzeige
-        this.calculateWeight(200,150);
+        //Score soll 100 nicht überschreiten
+        if(this.score >= 100){
+            this.score = 100;
+        }
+
+        if(this.score <= 0){
+            this.score = 0;
+        }
+
+        //Score wird in Gewicht umgerechnet für das Scoreboard
+        this.calculateWeight();
 
         this.weightText.text = "weight: " + this.weight + " goal: " + this.goal;
         console.log(this.score);
 
         if(this.scoreReached()){
 
-            this.weightText.text = "weight: " + this.goal + " goal: " + this.goal;
+            this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " immer weiter so du Tier!";
+        }
+
+        if(this.gameOver()){
+            this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " fauler Sack!";
         }
     },
 
@@ -187,10 +203,10 @@ Runner.Game.prototype = {
        // this.game.debug.body(this.ground);
     },
 
-    calculateWeight: function(startWeight, goalWeight){
+    calculateWeight: function(){
 
         //Faktor zwischen Weight und Score errechnen
-        var weightDifference = startWeight - goalWeight;
+        var weightDifference = this.maxWeight - this.goal;
         var multiples = 100/weightDifference;
 
         //Gewicht abhängig von der Scoreveränderung hoch- bzw. runterzählen
@@ -209,7 +225,16 @@ Runner.Game.prototype = {
     scoreReached: function(){
         //Überprüfen ob das Scorelimit erreich wurde
         var result = false;
-        if(this.score >= 100){
+        if(this.score == 100){
+            result = true;
+        }
+        return result;
+    },
+
+    gameOver: function(){
+
+        var result = false;
+        if(this.score == 0){
             result = true;
         }
         return result;
