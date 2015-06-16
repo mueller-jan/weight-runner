@@ -3,6 +3,7 @@
 Runner.Game = function () {
     console.log('init');
     this.spawnPositionX = null;
+
 };
 
 Runner.Game.prototype = {
@@ -54,6 +55,20 @@ Runner.Game.prototype = {
         this.obstacleGenerator.timer.start();
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
+
+        //Aktuelles Gewicht und Zielgewicht
+        this.weight = 200;
+        this.goal = 150;
+
+        //Score und vorheriger Score
+        this.score = 0;
+        this.previousScore = 0;
+
+        //Weighttext
+        var style = { font: "20px Arial", fill: "#fff", align: "center" };
+        this.weightText = this.game.add.text(30, 30, "Weight: " + this.weight + " Goal: " + this.goal, style);
+
+
     },
 
     update: function () {
@@ -97,6 +112,20 @@ Runner.Game.prototype = {
         itemTween.onComplete.add(function() {
             dummyItem.destroy();
         }, this);
+
+        //Bei itemHit wird der Score hochgezählt
+        this.score += 5;
+
+        //Score wird in Gewicht umgerechnet für die Anzeige
+        this.calculateWeight(200,150);
+
+        this.weightText.text = "weight: " + this.weight + " goal: " + this.goal;
+        console.log(this.score);
+
+        if(this.scoreReached()){
+
+            this.weightText.text = "Immer weiter so du Tier!";
+        }
     },
 
     dispose: function() {
@@ -150,5 +179,34 @@ Runner.Game.prototype = {
 
     render: function() {
        // this.game.debug.body(this.ground);
+    },
+
+    calculateWeight: function(startWeight, goalWeight){
+
+        //Faktor zwischen Weight und Score errechnen
+        var weightDifference = startWeight - goalWeight;
+        var multiples = 100/weightDifference;
+
+        //Gewicht abhängig von der Scoreveränderung hoch- bzw. runterzählen
+        while(this.previousScore <= this.score - multiples){
+            this.weight -= 1;
+            this.previousScore += multiples;
+        }
+
+        while(this.previousScore >= this.score + multiples){
+            this.weight += 1;
+            this.previousScore -= multiples;
+        }
+
+    },
+
+    scoreReached: function(){
+        //Überprüfen ob das Scorelimit erreich wurde
+        var result = false;
+        if(this.score >= 100){
+            result = true;
+        }
+        return result;
     }
+
 };
