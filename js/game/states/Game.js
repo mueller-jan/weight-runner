@@ -3,7 +3,6 @@
 Runner.Game = function () {
     console.log('init');
     this.spawnPositionX = null;
-
 };
 
 Runner.Game.prototype = {
@@ -34,7 +33,8 @@ Runner.Game.prototype = {
         this.ground.body.immovable = true;
 
         //Gruppen erzeugen
-        this.items = this.game.add.group();
+        this.goodItems = this.game.add.group();
+        this.badItems = this.game.add.group();
         this.obstacles = this.game.add.group();
 
         //Player
@@ -51,7 +51,7 @@ Runner.Game.prototype = {
         this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
         this.itemGenerator.timer.start();
 
-        this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generateObstacles, this);
+        this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.5, this.generateObstacles, this);
         this.obstacleGenerator.timer.start();
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -76,7 +76,8 @@ Runner.Game.prototype = {
         this.player.body.velocity.x = 0;
 
         this.game.physics.arcade.collide(this.player, this.ground);
-        this.game.physics.arcade.collide(this.player, this.items, this.itemHit, null, this);
+        this.game.physics.arcade.overlap(this.player, this.goodItems, this.itemHit, null, this);
+        this.game.physics.arcade.overlap(this.player, this.badItems, this.itemHit, null, this);
         this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this);
 
 
@@ -94,7 +95,7 @@ Runner.Game.prototype = {
         //springen - nur möglich, wenn der Spieler den Boden berührt
         if (this.cursors.up.isDown && this.player.body.touching.down)
         {
-            this.player.body.velocity.y = -250;
+            this.player.body.velocity.y = -350;
         }
     },
 
@@ -105,16 +106,10 @@ Runner.Game.prototype = {
 
     itemHit: function(player, item) {
         item.kill();
-
-        var dummyItem = new Item(this.game, item.x, item.y);
-        this.game.add.existing(dummyItem);
-        var itemTween = this.game.add.tween(dummyItem).to({x: 50, y: 50}, 300, Phaser.Easing.Circular.in, true);
-        itemTween.onComplete.add(function() {
-            dummyItem.destroy();
-        }, this);
+        this.currentWeight += item.weightValue;
 
         //Bei itemHit wird der Score hochgezählt
-        this.score += 5;
+        this.score += 10;
 
         //Score wird in Gewicht umgerechnet für die Anzeige
         this.calculateWeight(200,150);
@@ -124,34 +119,45 @@ Runner.Game.prototype = {
 
         if(this.scoreReached()){
 
-            this.weightText.text = "Immer weiter so du Tier!";
+            this.weightText.text = "weight: " + this.goal + " goal: " + this.goal;
         }
     },
 
     dispose: function() {
         console.log('disposing scene');
 
-        this.itemGenerator.timer.destroy();
+        this.goodItemGenerator.timer.destroy();
         this.obstacleGenerator.timer.destroy();
     },
 
     generateItems: function() {
-        this.createItem();
+        //1 zu 3 Chance auf gute Items
+        var r = Math.floor(Math.random() * 3);
+        var isGood = r != 1;
+        console.log(isGood);
+        this.createItem(0,0, isGood);
+
     },
 
-    createItem: function(x, y) {
+    createItem: function(x, y, isGood) {
         x = x || this.spawnPositionX;
         y = y || this.game.rnd.integerInRange(this.game.world.height - 120, this.game.world.height - 192);
 
+        var items = isGood ? this.goodItems : this.badItems;
+
         //Items recyclen
-        var item = this.items.getFirstExists(false);
+        var item = items.getFirstExists(false);
         if (!item) {
-            item = new Item(this.game, 0, 0);
-            this.items.add(item);
+            item = isGood ? new GoodItem(this.game, 0, 0) : new BadItem(this.game, 0, 0);
+            items.add(item);
         }
         item.reset(x, y);
         item.revive();
         return item;
+    },
+
+    createItemGroup: function(columns, rows) {
+
     },
 
     generateObstacles: function() {
@@ -208,5 +214,4 @@ Runner.Game.prototype = {
         }
         return result;
     }
-
 };
