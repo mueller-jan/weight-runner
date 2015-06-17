@@ -94,6 +94,9 @@ Runner.Game.prototype = {
         {
             this.player.jump();
         }
+        else if (this.cursors.down.isDown) {
+            this.player.roll();
+        }
     },
 
     obstacleHit: function() {
@@ -142,7 +145,6 @@ Runner.Game.prototype = {
     generateItems: function() {
         //1 zu 3 Chance auf schlechtes Item
         var r = this.game.rnd.integer() % 3;
-        console.log('r'+r);
         var isGood = r != 1;
 
         if(!this.previousItemType || this.previousItemType < 3) {
@@ -154,11 +156,11 @@ Runner.Game.prototype = {
                 case 1:
                 case 2:
                     //bei 1 oder 2 wird ein einzelnes Item erzeugt
-                    this.createItem(isGood);
+                    this.createItem(null, null, isGood);
                     break;
                 case 3:
                     //eine kleine Gruppe von Items erzeugen
-                    this.createItemGroup(2, 2, isGood);
+                     this.createItemGroup(2, 2, isGood);
                     break;
                 case 4:
                     //große Gruppe von Items erzeugen
@@ -215,8 +217,8 @@ Runner.Game.prototype = {
     },
 
     generateObstacles: function() {
-        //1 zu 4 Chance, dass ein Hindernis erzeugt wird
-        var r = this.game.rnd.integer() % 4;
+        //1 zu 2 Chance, dass ein Hindernis erzeugt wird
+        var r = this.game.rnd.integer() % 2;
         if (r == 1) {
             this.createObstacle();
         }

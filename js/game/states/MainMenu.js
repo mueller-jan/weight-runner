@@ -20,10 +20,9 @@ Runner.MainMenu.prototype = {
         this.ground = this.game.add.tileSprite(0,this.game.height - 73, this.game.width, 73, 'ground');
         this.ground.autoScroll(-200,0);
 
-        this.player = this.game.add.sprite(32, this.game.height - 120, 'player');
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
-        this.player.animations.play('right', 8, true);
-       // this.game.add.tween(this.player).to({y: this.player.y - 16}, 500, Phaser.Easing.Linear.NONE, true, 0, 100, true);
+        //Player
+        this.player = new Player(this.game, 32, this.game.height - 120);
+        this.game.world.add(this.player);
 
         var style = { font: "65px Arial", fill: "#fff", align: "center" };
         this.startText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "Tap to start", style);

@@ -2,14 +2,19 @@
 var Player = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'player');
 
-    this.animations.add('right', [5, 6, 7, 8], 10, true);
-    this.animations.play('right', 8, true);
+    this.animations.add('run', [1, 2, 3, 4], 10, true);
+    this.animations.add('roll', [5, 6, 7, 8], 10, false);
+    this.animations.play('run');
 
     game.physics.arcade.enableBody(this);
     this.body.collideWorldBounds = true;
 
     this.speedX = 150;
     this.speedY = 350;
+
+    this.events.onAnimationComplete.add(function(){
+        this.animations.play('run');
+    }, this);
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -33,3 +38,9 @@ Player.prototype.jump = function() {
         this.body.velocity.y = -this.speedY;
 }
 
+Player.prototype.roll = function() {
+    //kann nur rollen, wenn er den Boden berührt
+    if (this.body.touching.down)
+       this.animations.play("roll");
+
+}

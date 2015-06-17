@@ -8,10 +8,9 @@ var Item = function(game, x, y, key, frame)
     this.game.physics.arcade.enableBody(this);
     this.body.drag = 0;
     this.body.allowGravity = false;
-    this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
     this.events.onRevived.add(this.onRevived, this);
-    this.weightValue = 0;
+    this.scoreValue = 0;
 };
 
 Item.prototype = Object.create(Phaser.Sprite.prototype);
