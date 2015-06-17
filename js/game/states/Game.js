@@ -6,14 +6,16 @@ Runner.Game = function () {
 
 Runner.Game.prototype = {
     create: function () {
+        this.spawnPositionX = this.game.width + 64;
+        this.itemSpacingX = 10;
+        this.itemSpacingY = 10;
+
         // Welt-Grenzen setzen
         this.game.world.bounds = new Phaser.Rectangle(-100, 0, this.game.width + 300, this.game.height);
 
         //Phsysik-System starten
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.game.physics.arcade.gravity.y = 600;
-
-        this.spawnPositionX = this.game.width + 64;
 
         //Hintergrund
         this.background = this.game.add.tileSprite(0,0,this.game.width, 512, 'background');
@@ -139,11 +141,43 @@ Runner.Game.prototype = {
 
     generateItems: function() {
         //1 zu 3 Chance auf schlechtes Item
-        var r = Math.floor(Math.random() * 3);
+        var r = this.game.rnd.integer() % 3;
+        console.log('r'+r);
         var isGood = r != 1;
-        console.log(isGood);
-        this.createItem(0,0, isGood);
 
+        if(!this.previousItemType || this.previousItemType < 3) {
+            var itemType = this.game.rnd.integer() % 5;
+            switch(itemType) {
+                case 0:
+                    //kein Item wird erzeugt
+                    break;
+                case 1:
+                case 2:
+                    //bei 1 oder 2 wird ein einzelnes Item erzeugt
+                    this.createItem(isGood);
+                    break;
+                case 3:
+                    //eine kleine Gruppe von Items erzeugen
+                    this.createItemGroup(2, 2, isGood);
+                    break;
+                case 4:
+                    //große Gruppe von Items erzeugen
+                    this.createItemGroup(6, 2, isGood);
+                    break;
+                default:
+                    this.previousItemType = 0;
+                    break;
+            }
+            this.previousItemType = itemType;
+        } else {
+            if (this.previousItemType === 4) {
+                // die vorige Gruppe war groß,
+                // nächsten 2 Erzeugungen sollen übersprungen werden
+                this.previousItemType = 3;
+            } else {
+                this.previousItemType = 0;
+            }
+        }
     },
 
     createItem: function(x, y, isGood) {
@@ -163,12 +197,29 @@ Runner.Game.prototype = {
         return item;
     },
 
-    createItemGroup: function(columns, rows) {
-
+    createItemGroup: function(columns, rows, isGood) {
+        var itemSpawnY = this.game.rnd.integerInRange(50, this.game.world.height - 192);
+        var itemRowCounter = 0;
+        var itemColumnCounter = 0;
+        var item;
+        for(var i = 0; i < columns * rows; i++) {
+            item = this.createItem(this.spawnPositionX, itemSpawnY, isGood);
+            item.x = item.x + (itemColumnCounter * item.width) + (itemColumnCounter * this.itemSpacingX);
+            item.y = item.y + (itemRowCounter * item.height) + (itemRowCounter * this.itemSpacingY);
+            itemColumnCounter++;
+            if(i+1 >= columns && (i+1) % columns === 0) {
+                itemRowCounter++;
+                itemColumnCounter = 0;
+            }
+        }
     },
 
     generateObstacles: function() {
-        this.createObstacle();
+        //1 zu 4 Chance, dass ein Hindernis erzeugt wird
+        var r = this.game.rnd.integer() % 4;
+        if (r == 1) {
+            this.createObstacle();
+        }
     },
 
     createObstacle: function(x, y) {
