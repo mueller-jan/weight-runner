@@ -2,7 +2,6 @@
 
 Runner.Game = function () {
     console.log('init');
-    this.spawnPositionX = null;
 };
 
 Runner.Game.prototype = {
@@ -38,14 +37,8 @@ Runner.Game.prototype = {
         this.obstacles = this.game.add.group();
 
         //Player
-        this.player = this.game.add.sprite(32, this.game.height - 120, 'player');
-
-        //this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
-        this.player.animations.play('right', 8, true);
-
-        this.game.physics.arcade.enableBody(this.player);
-        this.player.body.collideWorldBounds = true;
+        this.player = new Player(this.game, 32, this.game.height - 120);
+        this.game.world.add(this.player);
 
         //Loops zum Erzeugen von Items und Hindernissen
         this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
@@ -79,6 +72,7 @@ Runner.Game.prototype = {
         // Geschwindigkeit zurücksetzen
         this.player.body.velocity.x = 0;
 
+        //Kollisionen
         this.game.physics.arcade.collide(this.player, this.ground);
         this.game.physics.arcade.overlap(this.player, this.goodItems, this.itemHit, null, this);
         this.game.physics.arcade.overlap(this.player, this.badItems, this.itemHit, null, this);
@@ -87,25 +81,22 @@ Runner.Game.prototype = {
 
         if (this.cursors.left.isDown)
         {
-            //nach links
-            this.player.body.velocity.x = -150;
+            this.player.moveLeft();
         }
         else if (this.cursors.right.isDown)
         {
-            //nach rechts
-            this.player.body.velocity.x = 150;
+            this.player.moveRight();
         }
 
-        //springen - nur möglich, wenn der Spieler den Boden berührt
-        if (this.cursors.up.isDown && this.player.body.touching.down)
+        if (this.cursors.up.isDown)
         {
-            this.player.body.velocity.y = -350;
+            this.player.jump();
         }
     },
 
     obstacleHit: function() {
         //player soll weiter rennen, wenn er ein Hindernis berührt
-        this.player.body.velocity.x = 200;
+        this.player.moveRight();
     },
 
     itemHit: function(player, item) {
@@ -142,12 +133,12 @@ Runner.Game.prototype = {
     dispose: function() {
         console.log('disposing scene');
 
-        this.goodItemGenerator.timer.destroy();
+        this.itemGenerator.timer.destroy();
         this.obstacleGenerator.timer.destroy();
     },
 
     generateItems: function() {
-        //1 zu 3 Chance auf gute Items
+        //1 zu 3 Chance auf schlechtes Item
         var r = Math.floor(Math.random() * 3);
         var isGood = r != 1;
         console.log(isGood);
