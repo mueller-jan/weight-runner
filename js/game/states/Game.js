@@ -70,7 +70,7 @@ Runner.Game.prototype = {
 
     update: function () {
         // Geschwindigkeit zurücksetzen
-        this.player.body.velocity.x = 0;
+        this.player.zero();
 
         //Kollisionen
         this.game.physics.arcade.collide(this.player, this.ground);
