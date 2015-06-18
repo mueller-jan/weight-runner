@@ -25,7 +25,7 @@ Runner.Preloader.prototype = {
         this.load.spritesheet('good_items', 'assets/images/good_items.png', 48, 48);
         this.load.spritesheet('bad_items', 'assets/images/bad_items.png', 48, 48);
         this.load.spritesheet('player', 'assets/images/player.png', 32, 48);
-
+        this.load.spritesheet('explosion', 'assets/images/explosion.png', 200, 200);
 
         //Audio laden
         //...

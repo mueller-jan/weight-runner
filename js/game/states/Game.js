@@ -38,6 +38,10 @@ Runner.Game.prototype = {
         this.badItems = this.game.add.group();
         this.obstacles = this.game.add.group();
 
+        //Explosionen
+        this.explosion = new Explosion(this.game, 0, 0);
+        this.game.world.add(this.explosion);
+
         //Player
         this.player = new Player(this.game, 32, this.game.height - 120);
         this.game.world.add(this.player);
@@ -99,14 +103,23 @@ Runner.Game.prototype = {
         }
     },
 
-    obstacleHit: function() {
+    obstacleHit: function(player, obstacle) {
         //player soll weiter rennen, wenn er ein Hindernis berührt
+        if (player.isRolling) {
+            obstacle.kill();
+
+            if (!this.explosion.animations.isPlaying) {
+            this.explosion.x = obstacle.x;
+            this.explosion.y = obstacle.y;
+            this.explosion.animations.play('explode');
+            }
+        }
+
         this.player.moveRight();
     },
 
     itemHit: function(player, item) {
         item.kill();
-
         //Der Score wird je nach Item hoch oder runtergezählt
         this.score += item.scoreValue;
 

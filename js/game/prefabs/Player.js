@@ -14,6 +14,7 @@ var Player = function(game, x, y) {
 
     this.events.onAnimationComplete.add(function(){
         this.animations.play('run');
+        this.isRolling = false;
     }, this);
 }
 
@@ -40,7 +41,9 @@ Player.prototype.jump = function() {
 
 Player.prototype.roll = function() {
     //kann nur rollen, wenn er den Boden berührt
-    if (this.body.touching.down)
-       this.animations.play("roll");
+    if (this.body.touching.down) {
+        this.animations.play("roll");
+        this.isRolling = true;
+    }
 
 }

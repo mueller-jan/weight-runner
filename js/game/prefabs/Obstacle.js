@@ -23,3 +23,7 @@ Obstacle.prototype.constructor = Obstacle;
 Obstacle.prototype.onRevived = function() {
     this.body.velocity.x = -200;
 }
+
+Obstacle.prototype.destroy = function() {
+    this.kill();
+}
