@@ -3,7 +3,7 @@ var Player = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'player');
 
     this.animations.add('run', [1, 2, 3, 4], 10, true);
-    this.animations.add('roll', [5, 6, 7, 8], 10, false);
+    this.animations.add('roll', [5, 6, 7, 8], 15, false);
     this.animations.play('run');
 
     game.physics.arcade.enableBody(this);
@@ -40,10 +40,6 @@ Player.prototype.jump = function() {
 }
 
 Player.prototype.roll = function() {
-    //kann nur rollen, wenn er den Boden berührt
-    if (this.body.touching.down) {
         this.animations.play("roll");
         this.isRolling = true;
-    }
-
 }

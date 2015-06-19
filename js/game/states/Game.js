@@ -37,10 +37,7 @@ Runner.Game.prototype = {
         this.goodItems = this.game.add.group();
         this.badItems = this.game.add.group();
         this.obstacles = this.game.add.group();
-
-        //Explosionen
-        this.explosion = new Explosion(this.game, 0, 0);
-        this.game.world.add(this.explosion);
+        this.explosions = this.game.add.group();
 
         //Player
         this.player = new Player(this.game, 32, this.game.height - 120);
@@ -50,7 +47,7 @@ Runner.Game.prototype = {
         this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
         this.itemGenerator.timer.start();
 
-        this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1.5, this.generateObstacles, this);
+        this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateObstacles, this);
         this.obstacleGenerator.timer.start();
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -108,10 +105,17 @@ Runner.Game.prototype = {
         if (player.isRolling) {
             obstacle.kill();
 
-            if (!this.explosion.animations.isPlaying) {
-            this.explosion.x = obstacle.x;
-            this.explosion.y = obstacle.y;
-            this.explosion.animations.play('explode');
+            var explosion = this.explosions.getFirstExists(false);
+            if (!explosion) {
+                explosion = this.explosions.add(new Explosion(this.game, 0, 0));
+            }
+
+
+            if (!explosion.animations.isPlaying) {
+
+                explosion.x = obstacle.x;
+                explosion.y = obstacle.y;
+                explosion.animations.play('explode');
             }
         }
 
@@ -197,7 +201,7 @@ Runner.Game.prototype = {
 
     createItem: function(x, y, isGood) {
         x = x || this.spawnPositionX;
-        y = y || this.game.rnd.integerInRange(this.game.world.height - 120, this.game.world.height - 192);
+        y = y || this.game.rnd.integerInRange(this.game.world.height - 140, this.game.world.height - 192);
 
         var items = isGood ? this.goodItems : this.badItems;
 
@@ -239,7 +243,7 @@ Runner.Game.prototype = {
 
     createObstacle: function(x, y) {
         x = x || this.spawnPositionX;
-        y = y || this.game.world.height - 90;
+        y = y || this.game.rnd.integerInRange(this.game.world.height - 100, this.game.world.height - 192);
 
         //Obstacles recyclen
         var obstacle = this.obstacles.getFirstExists(false);
