@@ -33,6 +33,11 @@ Runner.Game.prototype = {
         this.ground.body.allowGravity = false;
         this.ground.body.immovable = true;
 
+        //Gamesound
+        this.goodItemSound = this.game.add.audio('collectGoodItem');
+        this.badItemSound = this.game.add.audio('collectBadItem');
+        this.obstacleDestroySound = this.game.add.audio('obstacleDestroy');
+
         //Gruppen erzeugen
         this.goodItems = this.game.add.group();
         this.badItems = this.game.add.group();
@@ -107,7 +112,7 @@ Runner.Game.prototype = {
         //player soll weiter rennen, wenn er ein Hindernis berührt
         if (player.isRolling) {
             obstacle.kill();
-
+            this.obstacleDestroySound.play('', 0, 0.3, false);
             if (!this.explosion.animations.isPlaying) {
             this.explosion.x = obstacle.x;
             this.explosion.y = obstacle.y;
@@ -135,9 +140,11 @@ Runner.Game.prototype = {
         //Score wird in Gewicht umgerechnet für das Scoreboard
         this.calculateWeight();
 
+        //Gewicht wird auf dem Weightboard angezeigt
         this.weightText.text = "weight: " + this.weight + " goal: " + this.goal;
         console.log(this.score);
 
+        //Überprüft ob "Gewonnen" oder "GameOver"
         if(this.scoreReached()){
 
             this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " immer weiter so du Tier!";
@@ -146,6 +153,18 @@ Runner.Game.prototype = {
         if(this.gameOver()){
             this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " fauler Sack!";
         }
+
+        //Sound für good/badItem
+        if(item instanceof GoodItem){
+            if(!this.goodItemSound.isPlaying)
+            this.goodItemSound.play('', 0, 0.3, false);
+        }
+
+        if(item instanceof BadItem){
+            if(!this.badItemSound.isPlaying)
+            this.badItemSound.play('', 0, 0.5, false);
+        }
+
     },
 
     dispose: function() {

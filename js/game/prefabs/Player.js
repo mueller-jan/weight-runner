@@ -6,6 +6,9 @@ var Player = function(game, x, y) {
     this.animations.add('roll', [5, 6, 7, 8], 10, false);
     this.animations.play('run');
 
+    this.jumpSound = this.game.add.audio('jump');
+    this.rollSound = this.game.add.audio('roll');
+
     game.physics.arcade.enableBody(this);
     this.body.collideWorldBounds = true;
 
@@ -35,8 +38,10 @@ Player.prototype.moveLeft = function() {
 
 Player.prototype.jump = function() {
     //springen nur möglich, wenn Spieler den Boden berührt
-    if (this.body.touching.down)
+    if (this.body.touching.down) {
         this.body.velocity.y = -this.speedY;
+        this.jumpSound.play('', 0, 0.5, false);
+    }
 }
 
 Player.prototype.roll = function() {
