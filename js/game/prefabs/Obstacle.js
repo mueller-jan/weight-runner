@@ -8,7 +8,7 @@ var Obstacle = function(game, x, y, key, frame)
     Phaser.Sprite.call(this, game, x, y, key);
 
     this.anchor.setTo(0.5, 0.5);
-
+    this.scale.set(0.5);
     this.game.physics.arcade.enableBody(this);
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;

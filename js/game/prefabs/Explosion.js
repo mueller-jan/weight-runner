@@ -2,7 +2,7 @@
 var Explosion = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'explosion');
 
-    this.scale.set(0.4);
+    this.scale.set(0.5);
     this.anchor.setTo(0.5, 0.5);
     this.animations.add('explode', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 30, false);
     this.visible = false;
