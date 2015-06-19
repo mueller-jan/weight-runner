@@ -47,4 +47,6 @@ Player.prototype.jump = function() {
 Player.prototype.roll = function() {
         this.animations.play("roll");
         this.isRolling = true;
+        if(!this.rollSound.isPlaying)
+            this.rollSound.play('', 0, 0.3, false);
 }
