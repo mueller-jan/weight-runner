@@ -9,17 +9,19 @@
     <!-- include the phaser library -->
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.js"></script>
 
-    <!-- include the game states -->
+    <!-- include the game states and prefabs -->
     <script src="js/game/states/Boot.js"></script>
     <script src="js/game/states/Preloader.js"></script>
     <script src="js/game/states/MainMenu.js"></script>
     <script src="js/game/states/Game.js"></script>
+    <script src="js/game/states/GameOver.js"></script>
     <script src="js/game/prefabs/Item.js"></script>
     <script src="js/game/prefabs/BadItem.js"></script>
     <script src="js/game/prefabs/GoodItem.js"></script>
     <script src="js/game/prefabs/Obstacle.js"></script>
     <script src="js/game/prefabs/Player.js"></script>
     <script src="js/game/prefabs/Explosion.js"></script>
+    <script src="js/game/prefabs/GoalFlag.js"></script>
 
 </head>
 
@@ -31,6 +33,7 @@
         game.state.add('Preloader', Runner.Preloader);
         game.state.add('MainMenu', Runner.MainMenu);
         game.state.add('Game', Runner.Game);
+        game.state.add('GameOver', Runner.GameOver);
         game.state.start('Boot');
     })();
 </script>

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 var Player = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'player');
 
@@ -19,22 +19,22 @@ var Player = function(game, x, y) {
         this.animations.play('run');
         this.isRolling = false;
     }, this);
-}
+};
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.zero = function() {
     this.body.velocity.x = 0;
-}
+};
 
 Player.prototype.moveRight = function() {
     this.body.velocity.x = this.speedX;
-}
+};
 
 Player.prototype.moveLeft = function() {
     this.body.velocity.x = -this.speedX
-}
+};
 
 Player.prototype.jump = function() {
     //springen nur möglich, wenn Spieler den Boden berührt
@@ -42,11 +42,11 @@ Player.prototype.jump = function() {
         this.body.velocity.y = -this.speedY;
         this.jumpSound.play('', 0, 0.5, false);
     }
-}
+};
 
 Player.prototype.roll = function() {
         this.animations.play("roll");
         this.isRolling = true;
         if(!this.rollSound.isPlaying)
             this.rollSound.play('', 0, 0.3, false);
-}
+};

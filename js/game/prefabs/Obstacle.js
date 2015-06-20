@@ -1,9 +1,8 @@
 'use strict';
-var Obstacle = function(game, x, y, key, frame)
+var Obstacle = function(game, x, y, key)
 {
     //wenn ein kein key übergeben wurde, dann key auf setzen
     key = key || 'box';
-    frame = frame || 0;
 
     Phaser.Sprite.call(this, game, x, y, key);
 
@@ -22,8 +21,4 @@ Obstacle.prototype.constructor = Obstacle;
 
 Obstacle.prototype.onRevived = function() {
     this.body.velocity.x = -200;
-}
-
-Obstacle.prototype.destroy = function() {
-    this.kill();
-}
+};

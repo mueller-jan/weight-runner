@@ -19,7 +19,7 @@ Runner.Game.prototype = {
         } else {
             this.currentLevelStep = 0;
             //Level aus JSON-Datei lesen
-            this.levelGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateLevel, this)
+            this.levelGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateLevel, this);
             this.levelGenerator.timer.start();
         }
 
@@ -87,31 +87,35 @@ Runner.Game.prototype = {
     },
 
     update: function () {
-        // Geschwindigkeit zurücksetzen
-        this.player.zero();
 
-        //Kollisionen
-        this.game.physics.arcade.collide(this.player, this.ground);
-        this.game.physics.arcade.overlap(this.player, this.goodItems, this.itemHit, null, this);
-        this.game.physics.arcade.overlap(this.player, this.badItems, this.itemHit, null, this);
-        this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this);
+            // Geschwindigkeit zurücksetzen
+            this.player.zero();
 
+            //Kollisionen
+            this.game.physics.arcade.collide(this.player, this.ground);
+            this.game.physics.arcade.overlap(this.player, this.goodItems, this.itemHit, null, this);
+            this.game.physics.arcade.overlap(this.player, this.badItems, this.itemHit, null, this);
+            this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this);
 
-        if (this.cursors.left.isDown)
-        {
-            this.player.moveLeft();
-        }
-        else if (this.cursors.right.isDown)
-        {
-            this.player.moveRight();
-        }
+        if (!this.isGoalReached()) {
+            if (this.cursors.left.isDown)
+            {
+                this.player.moveLeft();
+            }
+            else if (this.cursors.right.isDown)
+            {
+                this.player.moveRight();
+            }
 
-        if (this.cursors.up.isDown)
-        {
-            this.player.jump();
-        }
-        else if (this.cursors.down.isDown) {
-            this.player.roll();
+            if (this.cursors.up.isDown)
+            {
+                this.player.jump();
+            }
+            else if (this.cursors.down.isDown) {
+                this.player.roll();
+            }
+        } else {
+            this.stopMovement();
         }
     },
 
@@ -192,7 +196,6 @@ Runner.Game.prototype = {
     generateLevel: function() {
         if (this.currentLevelStep < this.levelData.platformData.length) {
             var currentElement = this.levelData.platformData[this.currentLevelStep];
-            console.log(currentElement.type);
             for (var i = 0; i < currentElement.length; i++) {
                 switch (currentElement[i].type) {
                     case 0:
@@ -203,6 +206,9 @@ Runner.Game.prototype = {
                         break;
                     case 2:
                         this.createItem(this.spawnPositionX, currentElement[i].y, false);
+                        break;
+                    case 3:
+                        this.createGoalFlag(this.spawnPositionX, currentElement[i].y);
                         break;
                     default:
                         this.createObstacle(this.spawnPositionX, currentElement[i].y);
@@ -309,8 +315,17 @@ Runner.Game.prototype = {
         return obstacle;
     },
 
+
     createObstacleGroup: function(columns, rows) {
 
+    },
+
+    createGoalFlag: function(x, y) {
+        console.log('creategoaldflalkfjlsdjkfljsdlfajsd');
+        x = x || this.spawnPositionX;
+        y = y || 200;
+        this.goalFlag = new GoalFlag(this.game, x, y);
+        this.game.world.add(this.goalFlag);
     },
 
     render: function() {
@@ -334,6 +349,32 @@ Runner.Game.prototype = {
             this.previousScore -= multiples;
         }
 
+    },
+
+    isGoalReached: function() {
+        return this.goalFlag && (this.player.x > this.goalFlag.x + 20);
+    },
+
+    stopMovement: function() {
+        this.obstacles.forEachAlive(function(obstacle) {
+            obstacle.body.velocity = 0;
+            }, this);
+
+        this.goodItems.forEachAlive(function(item) {
+            item.body.velocity = 0;
+        }, this);
+
+        this.badItems.forEachAlive(function(item) {
+            item.body.velocity = 0;
+        }, this);
+
+        this.goalFlag.body.velocity = 0;
+        this.player.body.velocity = 0;
+        this.player.frame = 0;
+
+        this.ground.autoScroll(0,0);
+        this.midground.autoScroll(0,0);
+        this.background.autoScroll(0,0);
     },
 
     scoreReached: function(){
