@@ -38,6 +38,8 @@ Runner.Preloader.prototype = {
         this.load.audio('obstacleDestroy', 'assets/audio/obstacleDestroy2.wav');
         this.load.audio('roll', 'assets/audio/roll.wav');
 
+        this.load.text('level', 'assets/data/level.json');
+
         this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     },
 

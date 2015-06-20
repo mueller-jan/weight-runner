@@ -6,6 +6,23 @@ Runner.Game = function () {
 
 Runner.Game.prototype = {
     create: function () {
+        this.levelData = JSON.parse(this.game.cache.getText('level'));
+
+        if (!this.levelData) {
+            //wenn kein Level geladen werden kann, Level zufällig generieren
+            //Loops zum zufälligen Erzeugen von Items und Hindernissen
+            this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
+            this.itemGenerator.timer.start();
+
+            this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateObstacles, this);
+            this.obstacleGenerator.timer.start();
+        } else {
+            this.currentLevelStep = 0;
+            //Level aus JSON-Datei lesen
+            this.levelGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateLevel, this)
+            this.levelGenerator.timer.start();
+        }
+
         this.spawnPositionX = this.game.width + 64;
         this.itemSpacingX = 10;
         this.itemSpacingY = 10;
@@ -47,13 +64,6 @@ Runner.Game.prototype = {
         //Player
         this.player = new Player(this.game, 32, this.game.height - 120);
         this.game.world.add(this.player);
-
-        //Loops zum Erzeugen von Items und Hindernissen
-        this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
-        this.itemGenerator.timer.start();
-
-        this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateObstacles, this);
-        this.obstacleGenerator.timer.start();
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
@@ -118,7 +128,6 @@ Runner.Game.prototype = {
 
 
             if (!explosion.animations.isPlaying) {
-
                 explosion.x = obstacle.x;
                 explosion.y = obstacle.y;
                 explosion.animations.play('explode');
@@ -177,6 +186,30 @@ Runner.Game.prototype = {
 
         this.itemGenerator.timer.destroy();
         this.obstacleGenerator.timer.destroy();
+        this.levelGenerator.timer.destroy();
+    },
+
+    generateLevel: function() {
+        if (this.currentLevelStep < this.levelData.platformData.length) {
+            var currentElement = this.levelData.platformData[this.currentLevelStep];
+            console.log(currentElement.type);
+            for (var i = 0; i < currentElement.length; i++) {
+                switch (currentElement[i].type) {
+                    case 0:
+                        this.createObstacle(this.spawnPositionX, currentElement[i].y);
+                        break;
+                    case 1:
+                        this.createItem(this.spawnPositionX, currentElement[i].y, true);
+                        break;
+                    case 2:
+                        this.createItem(this.spawnPositionX, currentElement[i].y, false);
+                        break;
+                    default:
+                        this.createObstacle(this.spawnPositionX, currentElement[i].y);
+                }
+            }
+        }
+        this.currentLevelStep++;
     },
 
     generateItems: function() {
