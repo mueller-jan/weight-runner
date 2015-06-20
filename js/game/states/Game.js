@@ -88,8 +88,7 @@ Runner.Game.prototype = {
 
     update: function () {
 
-            // Geschwindigkeit zurücksetzen
-            this.player.zero();
+
 
             //Kollisionen
             this.game.physics.arcade.collide(this.player, this.ground);
@@ -98,6 +97,10 @@ Runner.Game.prototype = {
             this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this);
 
         if (!this.isGoalReached()) {
+
+            // Geschwindigkeit zurücksetzen
+            this.player.zero();
+
             if (this.cursors.left.isDown)
             {
                 this.player.moveLeft();
@@ -369,7 +372,7 @@ Runner.Game.prototype = {
         }, this);
 
         this.goalFlag.body.velocity = 0;
-        this.player.body.velocity = 0;
+        this.player.body.velocity.x = 0;
         this.player.frame = 0;
 
         this.ground.autoScroll(0,0);

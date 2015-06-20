@@ -20,4 +20,4 @@ Item.prototype.onRevived = function() {
     this.body.velocity.x = -200;
     var r = Math.floor(Math.random() * 2);
     this.frame = r;
-}
+};
