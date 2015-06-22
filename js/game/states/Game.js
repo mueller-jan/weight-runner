@@ -100,14 +100,12 @@ Runner.Game.prototype = {
             this.player.baseSpeed = 0;
         }
 
-
+        //Gegner sollen zufällig springen
+        this.enemies.forEachAlive(function(enemy) {
+            enemy.jumpRandomly();
+        }, this);
 
         if (!this.isGoalReached() && this.player.alive) {
-
-            this.enemies.forEachAlive(function(enemy) {
-                enemy.jumpRandomly();
-            }, this);
-
             // Geschwindigkeit zurücksetzen
             this.player.resetSpeed();
 
@@ -133,7 +131,8 @@ Runner.Game.prototype = {
         this.player.alive = false;
         this.player.animations.stop();
         this.stopMovement();
-        var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 530, angle: -120}, 300, Phaser.Easing.Circular.Out, true);
+        this.player.body.enabled = false;
+        var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 550, angle: -120}, 300, Phaser.Easing.Circular.Out, true);
         // deathTween.onComplete.add(this.showScoreboard, this);
     },
 
