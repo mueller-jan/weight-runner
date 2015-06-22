@@ -87,31 +87,27 @@ Runner.Game.prototype = {
     },
 
     update: function () {
-
-
-
-            //Kollisionen
-            this.game.physics.arcade.collide(this.player, this.ground);
-            this.game.physics.arcade.overlap(this.player, this.goodItems, this.itemHit, null, this);
-            this.game.physics.arcade.overlap(this.player, this.badItems, this.itemHit, null, this);
-            this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this);
+        //Kollisionen
+        this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this);
+        this.game.physics.arcade.overlap(this.player, this.goodItems, this.itemHit, null, this);
+        this.game.physics.arcade.overlap(this.player, this.badItems, this.itemHit, null, this);
+        if (!this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this)) {
+            this.player.baseSpeed = 0;
+        }
 
         if (!this.isGoalReached()) {
 
             // Geschwindigkeit zurücksetzen
-            this.player.zero();
+            this.player.resetSpeed();
 
-            if (this.cursors.left.isDown)
-            {
+            if (this.cursors.left.isDown) {
                 this.player.moveLeft();
             }
-            else if (this.cursors.right.isDown)
-            {
+            else if (this.cursors.right.isDown) {
                 this.player.moveRight();
             }
 
-            if (this.cursors.up.isDown)
-            {
+            if (this.cursors.up.isDown) {
                 this.player.jump();
             }
             else if (this.cursors.down.isDown) {
@@ -122,17 +118,23 @@ Runner.Game.prototype = {
         }
     },
 
+    groundHit: function(player, ground) {
+        if (this.player.baseSpeed > 0)
+            this.player.baseSpeed = 0;
+    },
+
     obstacleHit: function(player, obstacle) {
-        //player soll weiter rennen, wenn er ein Hindernis berührt
+        //player soll weiter rennen, wenn er sich auf dem Hindernis befindet
+        //deshalb wird die negative Geschwindigkeit des Hindernisses auf die Player-Geschwindigkeit addiert
+        this.player.baseSpeed = -obstacle.body.velocity.x;
         if (player.isRolling) {
             obstacle.kill();
             this.obstacleDestroySound.play('', 0, 0.3, false);
-            
+
             var explosion = this.explosions.getFirstExists(false);
             if (!explosion) {
                 explosion = this.explosions.add(new Explosion(this.game, 0, 0));
             }
-
 
             if (!explosion.animations.isPlaying) {
                 explosion.x = obstacle.x;
@@ -140,8 +142,6 @@ Runner.Game.prototype = {
                 explosion.animations.play('explode');
             }
         }
-
-        this.player.moveRight();
     },
 
     itemHit: function(player, item) {
@@ -178,12 +178,12 @@ Runner.Game.prototype = {
         //Sound für good/badItem
         if(item instanceof GoodItem){
             if(!this.goodItemSound.isPlaying)
-            this.goodItemSound.play('', 0, 0.3, false);
+                this.goodItemSound.play('', 0, 0.3, false);
         }
 
         if(item instanceof BadItem){
             if(!this.badItemSound.isPlaying)
-            this.badItemSound.play('', 0, 0.5, false);
+                this.badItemSound.play('', 0, 0.5, false);
         }
 
     },
@@ -239,7 +239,7 @@ Runner.Game.prototype = {
                     break;
                 case 3:
                     //eine kleine Gruppe von Items erzeugen
-                     this.createItemGroup(2, 2, isGood);
+                    this.createItemGroup(2, 2, isGood);
                     break;
                 case 4:
                     //große Gruppe von Items erzeugen
@@ -324,7 +324,6 @@ Runner.Game.prototype = {
     },
 
     createGoalFlag: function(x, y) {
-        console.log('creategoaldflalkfjlsdjkfljsdlfajsd');
         x = x || this.spawnPositionX;
         y = y || 200;
         this.goalFlag = new GoalFlag(this.game, x, y);
@@ -332,7 +331,7 @@ Runner.Game.prototype = {
     },
 
     render: function() {
-       // this.game.debug.body(this.ground);
+        // this.game.debug.body(this.ground);
     },
 
     calculateWeight: function(){
@@ -361,7 +360,7 @@ Runner.Game.prototype = {
     stopMovement: function() {
         this.obstacles.forEachAlive(function(obstacle) {
             obstacle.body.velocity = 0;
-            }, this);
+        }, this);
 
         this.goodItems.forEachAlive(function(item) {
             item.body.velocity = 0;

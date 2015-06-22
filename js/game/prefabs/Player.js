@@ -12,6 +12,7 @@ var Player = function(game, x, y) {
     game.physics.arcade.enableBody(this);
     this.body.collideWorldBounds = true;
 
+    this.baseSpeed = 0;
     this.speedX = 150;
     this.speedY = 350;
 
@@ -24,16 +25,16 @@ var Player = function(game, x, y) {
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
-Player.prototype.zero = function() {
-    this.body.velocity.x = 0;
+Player.prototype.resetSpeed = function() {
+    this.body.velocity.x = this.baseSpeed;
 };
 
 Player.prototype.moveRight = function() {
-    this.body.velocity.x = this.speedX;
+    this.body.velocity.x = this.baseSpeed + this.speedX;
 };
 
 Player.prototype.moveLeft = function() {
-    this.body.velocity.x = -this.speedX
+    this.body.velocity.x = this.baseSpeed - this.speedX
 };
 
 Player.prototype.jump = function() {
