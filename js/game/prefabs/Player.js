@@ -45,6 +45,7 @@ Player.prototype.jump = function() {
     }
 };
 
+
 Player.prototype.roll = function() {
         this.animations.play("roll");
         this.isRolling = true;

@@ -60,6 +60,7 @@ Runner.Game.prototype = {
         this.badItems = this.game.add.group();
         this.obstacles = this.game.add.group();
         this.explosions = this.game.add.group();
+        this.enemies = this.game.add.group();
 
         //Player
         this.player = new Player(this.game, 32, this.game.height - 120);
@@ -87,7 +88,11 @@ Runner.Game.prototype = {
     },
 
     update: function () {
+
         //Kollisionen
+        this.game.physics.arcade.collide(this.enemies, this.ground);
+        this.game.physics.arcade.collide(this.enemies, this.obstacles);
+        this.game.physics.arcade.collide(this.player, this.enemies, this.enemyHit, null, this);
         this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this);
         this.game.physics.arcade.overlap(this.player, this.goodItems, this.itemHit, null, this);
         this.game.physics.arcade.overlap(this.player, this.badItems, this.itemHit, null, this);
@@ -95,7 +100,13 @@ Runner.Game.prototype = {
             this.player.baseSpeed = 0;
         }
 
-        if (!this.isGoalReached()) {
+
+
+        if (!this.isGoalReached() && this.player.alive) {
+
+            this.enemies.forEachAlive(function(enemy) {
+                enemy.jumpRandomly();
+            }, this);
 
             // Geschwindigkeit zurücksetzen
             this.player.resetSpeed();
@@ -118,9 +129,16 @@ Runner.Game.prototype = {
         }
     },
 
+    enemyHit: function(player, item) {
+        this.player.alive = false;
+        this.player.animations.stop();
+        this.stopMovement();
+        var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 530, angle: -120}, 300, Phaser.Easing.Circular.Out, true);
+        // deathTween.onComplete.add(this.showScoreboard, this);
+    },
+
     groundHit: function(player, ground) {
-        if (this.player.baseSpeed > 0)
-            this.player.baseSpeed = 0;
+
     },
 
     obstacleHit: function(player, obstacle) {
@@ -197,8 +215,8 @@ Runner.Game.prototype = {
     },
 
     generateLevel: function() {
-        if (this.currentLevelStep < this.levelData.platformData.length) {
-            var currentElement = this.levelData.platformData[this.currentLevelStep];
+        if (this.currentLevelStep < this.levelData.objectData.length) {
+            var currentElement = this.levelData.objectData[this.currentLevelStep];
             for (var i = 0; i < currentElement.length; i++) {
                 switch (currentElement[i].type) {
                     case 0:
@@ -211,6 +229,9 @@ Runner.Game.prototype = {
                         this.createItem(this.spawnPositionX, currentElement[i].y, false);
                         break;
                     case 3:
+                        this.createEnemy(this.spawnPositionX, currentElement[i].y);
+                        break;
+                    case 4:
                         this.createGoalFlag(this.spawnPositionX, currentElement[i].y);
                         break;
                     default:
@@ -323,6 +344,21 @@ Runner.Game.prototype = {
 
     },
 
+    createEnemy: function(x, y) {
+        x = x || this.spawnPositionX;
+        y = y || 400;
+
+        //Obstacles recyclen
+        var enemy = this.enemies.getFirstExists(false);
+        if (!enemy) {
+            enemy = new Enemy(this.game, 0, 0);
+            this.enemies.add(enemy);
+        }
+        enemy.reset(x, y);
+        enemy.revive();
+        return enemy;
+    },
+
     createGoalFlag: function(x, y) {
         x = x || this.spawnPositionX;
         y = y || 200;
@@ -370,13 +406,17 @@ Runner.Game.prototype = {
             item.body.velocity = 0;
         }, this);
 
-        this.goalFlag.body.velocity = 0;
+        this.levelGenerator.timer.stop();
+
+        if (this.goalFlag)
+            this.goalFlag.body.velocity = 0;
+
         this.player.body.velocity.x = 0;
         this.player.frame = 0;
 
-        this.ground.autoScroll(0,0);
-        this.midground.autoScroll(0,0);
-        this.background.autoScroll(0,0);
+        this.ground.stopScroll();
+        this.midground.stopScroll();
+        this.background.stopScroll();
     },
 
     scoreReached: function(){
