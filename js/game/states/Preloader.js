@@ -23,12 +23,13 @@ Runner.Preloader.prototype = {
         this.load.image('box', 'assets/images/box.png');
         this.load.image('goal_flag', 'assets/images/goal_flag.png');
 
-        this.load.spritesheet('good_item_collected', 'assets/images/good_item_collected.png', 128, 128);
         this.load.spritesheet('good_items', 'assets/images/good_items.png', 48, 48);
         this.load.spritesheet('bad_items', 'assets/images/bad_items.png', 48, 48);
         this.load.spritesheet('player', 'assets/images/player.png', 32, 48);
         this.load.spritesheet('enemy', 'assets/images/enemy.png', 32, 32);
         this.load.spritesheet('explosion', 'assets/images/explosion.png', 200, 200);
+        this.load.spritesheet('sparkle', 'assets/images/sparkle.png', 170, 170);
+        this.load.spritesheet('red_sparkle', 'assets/images/red_sparkle.png', 170, 170);
 
         //Audio laden
         this.load.audio('jump', 'assets/audio/jump2.wav');

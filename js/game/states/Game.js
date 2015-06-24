@@ -173,17 +173,7 @@ Runner.Game.prototype = {
         if (player.isRolling) {
             obstacle.kill();
             this.obstacleDestroySound.play('', 0, 0.3, false);
-
-            var explosion = this.explosions.getFirstExists(false);
-            if (!explosion) {
-                explosion = this.explosions.add(new Explosion(this.game, 0, 0));
-            }
-
-            if (!explosion.animations.isPlaying) {
-                explosion.x = obstacle.x;
-                explosion.y = obstacle.y;
-                explosion.animations.play('explode');
-            }
+            this.createExplosion(obstacle.x, obstacle.y, 'explosion');
         }
     },
 
@@ -218,15 +208,17 @@ Runner.Game.prototype = {
             this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " fauler Sack!";
         }
 
-        //Sound für good/badItem
+        //Sound und Animationen für good/badItem
         if(item instanceof GoodItem){
             if(!this.goodItemSound.isPlaying)
                 this.goodItemSound.play('', 0, 0.3, false);
-        }
 
-        if(item instanceof BadItem){
+            this.createExplosion(item.x, item.y, 'sparkle');
+        } else {
             if(!this.badItemSound.isPlaying)
                 this.badItemSound.play('', 0, 0.5, false);
+
+            this.createExplosion(item.x, item.y, 'red_sparkle');
         }
 
     },
@@ -389,6 +381,19 @@ Runner.Game.prototype = {
         y = y || 200;
         this.goalFlag = new GoalFlag(this.game, x, y);
         this.game.world.add(this.goalFlag);
+    },
+
+    createExplosion: function(x, y, type) {
+        var explosion = this.explosions.getFirstExists(false);
+        if (!explosion) {
+            explosion = this.explosions.add(new Explosion(this.game, 0, 0, type));
+        }
+
+        if (!explosion.animations.isPlaying) {
+            explosion.x = x;
+            explosion.y = y;
+            explosion.animations.play('explode');
+        }
     },
 
     render: function() {
