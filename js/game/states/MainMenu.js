@@ -2,7 +2,7 @@
 
 Runner.MainMenu = function() {
     this.background = null;
-    this.player = null;
+    this.humanPlayer = null;
     this.playButton = null;
 };
 
@@ -21,8 +21,8 @@ Runner.MainMenu.prototype = {
         this.ground.autoScroll(-200,0);
 
         //Player
-        this.player = new Player(this.game, 32, this.game.height - 120);
-        this.game.world.add(this.player);
+        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 120);
+        this.game.world.add(this.humanPlayer);
 
         var style = { font: "65px Arial", fill: "#fff", align: "center" };
         this.startText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "Tap to start", style);

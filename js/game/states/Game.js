@@ -63,8 +63,8 @@ Runner.Game.prototype = {
         this.enemies = this.game.add.group();
 
         //Player
-        this.player = new Player(this.game, 32, this.game.height - 120);
-        this.game.world.add(this.player);
+        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 120);
+        this.game.world.add(this.humanPlayer);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
@@ -88,50 +88,76 @@ Runner.Game.prototype = {
     },
 
     update: function () {
-
         //Kollisionen
-        this.game.physics.arcade.collide(this.enemies, this.ground);
-        this.game.physics.arcade.collide(this.enemies, this.obstacles);
-        this.game.physics.arcade.collide(this.player, this.enemies, this.enemyHit, null, this);
-        this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this);
-        this.game.physics.arcade.overlap(this.player, this.goodItems, this.itemHit, null, this);
-        this.game.physics.arcade.overlap(this.player, this.badItems, this.itemHit, null, this);
-        if (!this.game.physics.arcade.collide(this.player, this.obstacles, this.obstacleHit, null, this)) {
-            this.player.baseSpeed = 0;
-        }
+        this.handleEnemyCollisions();
+        this.handlePlayerCollisions();
 
-        //Gegner sollen zufällig springen
-        this.enemies.forEachAlive(function(enemy) {
-            enemy.jumpRandomly();
-        }, this);
-
-        if (!this.isGoalReached() && this.player.alive) {
-            // Geschwindigkeit zurücksetzen
-            this.player.resetSpeed();
-
-            if (this.cursors.left.isDown) {
-                this.player.moveLeft();
-            }
-            else if (this.cursors.right.isDown) {
-                this.player.moveRight();
-            }
-
-            if (this.cursors.up.isDown) {
-                this.player.jump();
-            }
-            else if (this.cursors.down.isDown) {
-                this.player.roll();
-            }
+        //Bewegung von Spieler und Gegnern
+        this.handleEnemyMovement();
+        if (!this.isGoalReached() && this.humanPlayer.alive) {
+            this.handlePlayerMovement();
         } else {
             this.stopMovement();
         }
     },
 
+    handleEnemyCollisions: function() {
+        this.game.physics.arcade.collide(this.enemies, this.ground);
+
+        this.enemies.forEachAlive(function(enemy) {
+            if (!this.game.physics.arcade.collide(enemy, this.obstacles, this.obstacleHit, null, this)) {
+                enemy.baseSpeed = 0;
+            }
+        }, this);
+
+    },
+
+    handlePlayerCollisions: function() {
+        this.game.physics.arcade.collide(this.humanPlayer, this.enemies, this.enemyHit, null, this);
+        this.game.physics.arcade.collide(this.humanPlayer, this.ground, this.groundHit, null, this);
+        this.game.physics.arcade.overlap(this.humanPlayer, this.goodItems, this.itemHit, null, this);
+        this.game.physics.arcade.overlap(this.humanPlayer, this.badItems, this.itemHit, null, this);
+        if (!this.game.physics.arcade.collide(this.humanPlayer, this.obstacles, this.obstacleHit, null, this)) {
+            this.humanPlayer.baseSpeed = 0;
+        }
+    },
+
+    handleEnemyMovement: function() {
+        this.enemies.forEachAlive(function(enemy) {
+            enemy.moveLeft();
+
+            //Gegner sollen zufällig springen
+            var r = this.game.rnd.integer() % 100;
+            if (r === 1)
+                enemy.jump();
+
+        }, this);
+    },
+
+    handlePlayerMovement: function() {
+        // Geschwindigkeit zurücksetzen
+        this.humanPlayer.resetSpeed();
+
+        if (this.cursors.left.isDown) {
+            this.humanPlayer.moveLeft();
+        }
+        else if (this.cursors.right.isDown) {
+            this.humanPlayer.moveRight();
+        }
+
+        if (this.cursors.up.isDown) {
+            this.humanPlayer.jump();
+        }
+        else if (this.cursors.down.isDown) {
+            this.humanPlayer.roll();
+        }
+    },
+
     enemyHit: function(player, item) {
-        this.player.alive = false;
-        this.player.animations.stop();
+        this.humanPlayer.alive = false;
+        this.humanPlayer.animations.stop();
         this.stopMovement();
-        this.player.body.enabled = false;
+        this.humanPlayer.body.enabled = false;
         var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 550, angle: -120}, 300, Phaser.Easing.Circular.Out, true);
         // deathTween.onComplete.add(this.showScoreboard, this);
     },
@@ -141,9 +167,9 @@ Runner.Game.prototype = {
     },
 
     obstacleHit: function(player, obstacle) {
-        //player soll weiter rennen, wenn er sich auf dem Hindernis befindet
+        //Player soll weiter rennen, wenn er sich auf dem Hindernis befindet
         //deshalb wird die negative Geschwindigkeit des Hindernisses auf die Player-Geschwindigkeit addiert
-        this.player.baseSpeed = -obstacle.body.velocity.x;
+        player.baseSpeed = -obstacle.body.velocity.x;
         if (player.isRolling) {
             obstacle.kill();
             this.obstacleDestroySound.play('', 0, 0.3, false);
@@ -350,7 +376,7 @@ Runner.Game.prototype = {
         //Obstacles recyclen
         var enemy = this.enemies.getFirstExists(false);
         if (!enemy) {
-            enemy = new Enemy(this.game, 0, 0);
+            enemy = new EnemyPlayer(this.game, 0, 0);
             this.enemies.add(enemy);
         }
         enemy.reset(x, y);
@@ -389,29 +415,22 @@ Runner.Game.prototype = {
     },
 
     isGoalReached: function() {
-        return this.goalFlag && (this.player.x > this.goalFlag.x + 20);
+        return this.goalFlag && (this.humanPlayer.x > this.goalFlag.x + 20);
     },
 
     stopMovement: function() {
-        this.obstacles.forEachAlive(function(obstacle) {
-            obstacle.body.velocity = 0;
-        }, this);
-
-        this.goodItems.forEachAlive(function(item) {
-            item.body.velocity = 0;
-        }, this);
-
-        this.badItems.forEachAlive(function(item) {
-            item.body.velocity = 0;
-        }, this);
+        this.enemies.setAll('body.velocity.x', 0);
+        this.goodItems.setAll('body.velocity.x', 0);
+        this.badItems.setAll('body.velocity.x', 0);
+        this.obstacles.setAll('body.velocity.x', 0);
 
         this.levelGenerator.timer.stop();
 
         if (this.goalFlag)
             this.goalFlag.body.velocity = 0;
 
-        this.player.body.velocity.x = 0;
-        this.player.frame = 0;
+        this.humanPlayer.body.velocity.x = 0;
+        this.humanPlayer.frame = 0;
 
         this.ground.stopScroll();
         this.midground.stopScroll();

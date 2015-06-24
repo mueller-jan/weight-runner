@@ -18,8 +18,8 @@ Runner.GameOver.prototype = {
         this.ground.autoScroll(-200,0);
 
         //Player
-        this.player = new Player(this.game, 32, this.game.height - 120);
-        this.game.world.add(this.player);
+        this.humanPlayer = new Player(this.game, 32, this.game.height - 120);
+        this.game.world.add(this.humanPlayer);
 
         var style = { font: "65px Arial", fill: "#fff", align: "center" };
         this.gameOverText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "Game Over", style);
