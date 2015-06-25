@@ -23,6 +23,9 @@ Runner.Preloader.prototype = {
         this.load.image('box', 'assets/images/box.png');
         this.load.image('goal_flag', 'assets/images/goal_flag.png');
 
+        this.load.image('button_level', 'assets/images/button_level.png');
+        this.load.image('button', 'assets/images/button.png');
+
         this.load.spritesheet('good_items', 'assets/images/good_items.png', 48, 48);
         this.load.spritesheet('bad_items', 'assets/images/bad_items.png', 48, 48);
         this.load.spritesheet('player', 'assets/images/player.png', 32, 48);

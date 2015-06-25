@@ -3,7 +3,6 @@
 Runner.MainMenu = function() {
     this.background = null;
     this.humanPlayer = null;
-    this.playButton = null;
 };
 
 Runner.MainMenu.prototype = {
@@ -24,15 +23,32 @@ Runner.MainMenu.prototype = {
         this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 120);
         this.game.world.add(this.humanPlayer);
 
-        var style = { font: "65px Arial", fill: "#fff", align: "center" };
-        this.startText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, "Tap to start", style);
-        this.startText.anchor.set(0.5);
+        this.addButton(this.game.width/2, 200, 'Start new game', this.startGame);
+        this.addButton(this.game.width/2, 300, 'Load levels', this.loadLevelMenu);
+        this.addButton(this.game.width/2, 400, 'Settings', this.loadSettingsMenu);
+    },
+
+    addButton: function(x, y, text, callback) {
+        var btn = this.add.button(x, y, 'button', callback, this);
+        btn.anchor.setTo(0.5, 0.5);
+        btn.scale.setTo(0.6, 0.5);
+
+        var txt = this.add.text(x, y, text, { font: "bold 36px Arial", fill: "#FF4136", stroke: "#FFFFFF", strokeThickness: 3 });
+        txt.anchor.setTo(0.5, 0.5);
+    },
+
+    startGame: function() {
+        this.game.state.start('Game');
+    },
+
+    loadLevelMenu: function() {
+        this.state.start('LevelsMenu');
+    },
+
+    loadSettingsMenu: function() {
     },
 
     update: function () {
-        if(this.game.input.activePointer.justPressed()) {
-            this.game.state.start('Game');
-        }
     }
 
 };
