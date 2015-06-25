@@ -84,6 +84,8 @@ Runner.Game.prototype = {
         var style = { font: "20px Arial", fill: "#fff", align: "center" };
         this.weightText = this.game.add.text(30, 30, "weight: " + this.weight + " Goal: " + this.goal, style);
 
+        //Scoreboard
+        this.scoreboard = new Scoreboard(this.game);
 
     },
 
@@ -159,7 +161,7 @@ Runner.Game.prototype = {
         this.stopMovement();
         this.humanPlayer.body.enabled = false;
         var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 550, angle: -120}, 300, Phaser.Easing.Circular.Out, true);
-        // deathTween.onComplete.add(this.showScoreboard, this);
+        deathTween.onComplete.add(this.showScoreboard, this);
     },
 
     groundHit: function(player, ground) {
@@ -440,6 +442,10 @@ Runner.Game.prototype = {
         this.ground.stopScroll();
         this.midground.stopScroll();
         this.background.stopScroll();
+    },
+
+    showScoreboard: function() {
+        this.scoreboard.show(this.score);
     },
 
     scoreReached: function(){
