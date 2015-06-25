@@ -6,11 +6,13 @@ var Item = function(game, x, y, key, frame)
     Phaser.Sprite.call(this, game, x, y, key, frame);
     this.anchor.setTo(0.5, 0.5);
     this.game.physics.arcade.enableBody(this);
-    this.body.drag = 0;
     this.body.allowGravity = false;
     this.outOfBoundsKill = true;
     this.events.onRevived.add(this.onRevived, this);
     this.scoreValue = 0;
+    this.body.checkCollision.up = false;
+    this.body.checkCollision.down = false;
+
 };
 
 Item.prototype = Object.create(Phaser.Sprite.prototype);
