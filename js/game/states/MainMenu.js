@@ -23,9 +23,18 @@ Runner.MainMenu.prototype = {
         this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 120);
         this.game.world.add(this.humanPlayer);
 
-        this.addButton(this.game.width/2, 200, 'Start new game', this.startGame);
-        this.addButton(this.game.width/2, 300, 'Load levels', this.loadLevelMenu);
-        this.addButton(this.game.width/2, 400, 'Settings', this.loadSettingsMenu);
+        // Header
+        var header = this.add.text(this.game.width/2, this.game.height / 5, "Weight-Runner", {
+            font: "bold 90px Arial",
+            fill: "#FF4136",
+            stroke: "#FFFFFF",
+            strokeThickness: 3
+        });
+        header.anchor.setTo(0.5, 0.5);
+
+        this.addButton(this.game.width/2, 250, 'Start new game', this.startGame);
+        this.addButton(this.game.width/2, 350, 'Load levels', this.loadLevelMenu);
+        this.addButton(this.game.width/2, 450, 'Settings', this.loadSettingsMenu);
     },
 
     addButton: function(x, y, text, callback) {
@@ -46,6 +55,7 @@ Runner.MainMenu.prototype = {
     },
 
     loadSettingsMenu: function() {
+        this.state.start('SettingsMenu');
     },
 
     update: function () {

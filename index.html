@@ -25,6 +25,7 @@
     <script src="js/game/prefabs/Explosion.js"></script>
     <script src="js/game/prefabs/GoalFlag.js"></script>
     <script src="js/game/states/LevelsMenu.js"></script>
+    <script src="js/game/states/SettingsMenu.js"></script>
 
 </head>
 
@@ -38,6 +39,7 @@
         game.state.add('Game', Runner.Game);
         game.state.add('GameOver', Runner.GameOver);
         game.state.add('LevelsMenu', Runner.LevelsMenu);
+        game.state.add('SettingsMenu', Runner.SettingsMenu);
         game.state.start('Boot');
     })();
 </script>
