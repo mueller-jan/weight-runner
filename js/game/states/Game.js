@@ -400,7 +400,7 @@ Runner.Game.prototype = {
     },
 
     render: function() {
-        // this.game.debug.body(this.ground);
+        //this.game.debug.body(this.humanPlayer);
     },
 
     calculateWeight: function(){
