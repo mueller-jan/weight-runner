@@ -63,7 +63,7 @@ Runner.Game.prototype = {
         this.enemies = this.game.add.group();
 
         //Player
-        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 220);
+        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 170);
         this.game.world.add(this.humanPlayer);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();

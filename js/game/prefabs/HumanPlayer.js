@@ -6,8 +6,8 @@ var HumanPlayer = function(game, x, y) {
     this.animations.add('roll', [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38], 30, false);
     this.animations.play('run');
 
-   // this.scale.set(1);
-    this.body.setSize(70, 140, 40, 0);
+    this.scale.set(0.7);
+    this.body.setSize(70, 140, 20, 0);
 
     this.rollSound = this.game.add.audio('roll');
 
