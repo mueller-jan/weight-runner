@@ -20,7 +20,7 @@ Runner.MainMenu.prototype = {
         this.ground.autoScroll(-200,0);
 
         //Player
-        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 120);
+        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 220);
         this.game.world.add(this.humanPlayer);
 
         // Header

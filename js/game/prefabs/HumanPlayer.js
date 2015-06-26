@@ -2,9 +2,12 @@
 var HumanPlayer = function(game, x, y) {
     Player.call(this, game, x, y, 'player');
 
-    this.animations.add('run', [1, 2, 3, 4], 10, true);
-    this.animations.add('roll', [5, 6, 7, 8], 15, false);
+    this.animations.add('run', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 30, true);
+    this.animations.add('roll', [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38], 30, false);
     this.animations.play('run');
+
+   // this.scale.set(1);
+    this.body.setSize(this.body.width, 140, 0, 0);
 
     this.rollSound = this.game.add.audio('roll');
 

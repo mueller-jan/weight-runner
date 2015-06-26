@@ -63,7 +63,7 @@ Runner.Game.prototype = {
         this.enemies = this.game.add.group();
 
         //Player
-        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 120);
+        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 220);
         this.game.world.add(this.humanPlayer);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -160,7 +160,8 @@ Runner.Game.prototype = {
         this.humanPlayer.animations.stop();
         this.stopMovement();
         this.humanPlayer.body.enabled = false;
-        var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 550, angle: -120}, 300, Phaser.Easing.Circular.Out, true);
+        this.humanPlayer.body.moves = false;
+        var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 560, angle: -90}, 300, Phaser.Easing.Circular.Out, true);
         deathTween.onComplete.add(this.showScoreboard, this);
     },
 
