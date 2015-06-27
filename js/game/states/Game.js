@@ -116,6 +116,7 @@ Runner.Game.prototype = {
 
         if (this.isLevelEndReached()) {
             if (!this.scoreboard.isShown) {
+                this.disablePlayer();
                 this.showScoreboard();
             }
         }
@@ -177,10 +178,7 @@ Runner.Game.prototype = {
 
     enemyHit: function(player, item) {
         console.log('enemy hit');
-        this.humanPlayer.body.enabled = false;
-        this.humanPlayer.alive = false;
-        this.humanPlayer.animations.stop();
-        this.humanPlayer.body.moves = false;
+        this.disablePlayer();
         var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 560, angle: -90}, 300, Phaser.Easing.Circular.Out, true);
         deathTween.onComplete.add(this.showScoreboard, this);
         this.stopMovement();
@@ -462,9 +460,11 @@ Runner.Game.prototype = {
         this.background.stopScroll();
     },
 
-    showScoreboard: function() {
-        var isGoalWeightReached = this.weight <= this.goal;
-        this.scoreboard.show(this.score, this.isLevelEndReached(), isGoalWeightReached);
+    disablePlayer: function() {
+        this.humanPlayer.body.enabled = false;
+        this.humanPlayer.alive = false;
+        this.humanPlayer.body.moves = false;
+        this.humanPlayer.animations.stop();
     },
 
     scoreReached: function(){
@@ -483,5 +483,9 @@ Runner.Game.prototype = {
             result = true;
         }
         return result;
+    },
+
+    showScoreboard: function() {
+        this.scoreboard.show(this.score, this.isLevelEndReached(), this.scoreReached());
     }
 };
