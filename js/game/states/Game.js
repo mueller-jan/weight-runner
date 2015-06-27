@@ -66,6 +66,12 @@ Runner.Game.prototype = {
         this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 170);
         this.game.world.add(this.humanPlayer);
 
+        //left wall
+        this.wall = this.game.add.sprite(0, 0, 'wall');
+        this.game.physics.arcade.enableBody(this.wall);
+        this.wall.body.allowGravity = false;
+        this.wall.visible = false;
+
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
         //Aktuelles Gewicht und Zielgewicht
@@ -86,17 +92,16 @@ Runner.Game.prototype = {
 
         //Scoreboard
         this.scoreboard = new Scoreboard(this.game);
-
     },
 
     update: function () {
-        //Kollisionen
+        //Kollisionen und Bewegung für Gegner
         this.handleEnemyCollisions();
-        this.handlePlayerCollisions();
-
-        //Bewegung von Spieler und Gegnern
         this.handleEnemyMovement();
+
+        //Kollisionen und Bewegung für Spieler
         if (!this.isGoalReached() && this.humanPlayer.alive) {
+            this.handlePlayerCollisions();
             this.handlePlayerMovement();
         } else {
             this.stopMovement();
@@ -119,6 +124,7 @@ Runner.Game.prototype = {
         this.game.physics.arcade.collide(this.humanPlayer, this.ground, this.groundHit, null, this);
         this.game.physics.arcade.overlap(this.humanPlayer, this.goodItems, this.itemHit, null, this);
         this.game.physics.arcade.overlap(this.humanPlayer, this.badItems, this.itemHit, null, this);
+        this.game.physics.arcade.overlap(this.humanPlayer, this.wall, this.enemyHit, null, this);
         if (!this.game.physics.arcade.collide(this.humanPlayer, this.obstacles, this.obstacleHit, null, this)) {
             this.humanPlayer.baseSpeed = 0;
         }
@@ -132,7 +138,6 @@ Runner.Game.prototype = {
             var r = this.game.rnd.integer() % 100;
             if (r === 1)
                 enemy.jump();
-
         }, this);
     },
 
@@ -156,11 +161,12 @@ Runner.Game.prototype = {
     },
 
     enemyHit: function(player, item) {
+        console.log('enemy hit');
+        this.humanPlayer.body.enabled = false;
         this.humanPlayer.alive = false;
         this.humanPlayer.animations.stop();
-        this.stopMovement();
-        this.humanPlayer.body.enabled = false;
         this.humanPlayer.body.moves = false;
+        this.stopMovement();
         var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 560, angle: -90}, 300, Phaser.Easing.Circular.Out, true);
         deathTween.onComplete.add(this.showScoreboard, this);
     },
@@ -223,7 +229,6 @@ Runner.Game.prototype = {
 
             this.createExplosion(item.x, item.y, 'red_sparkle');
         }
-
     },
 
     dispose: function() {
@@ -359,7 +364,6 @@ Runner.Game.prototype = {
         return obstacle;
     },
 
-
     createObstacleGroup: function(columns, rows) {
 
     },
@@ -404,7 +408,6 @@ Runner.Game.prototype = {
     },
 
     calculateWeight: function(){
-
         //Faktor zwischen Weight und Score errechnen
         var weightDifference = this.maxWeight - this.goal;
         var multiples = 100/weightDifference;
