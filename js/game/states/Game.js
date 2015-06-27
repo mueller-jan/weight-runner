@@ -67,10 +67,17 @@ Runner.Game.prototype = {
         this.game.world.add(this.humanPlayer);
 
         //left wall
-        this.wall = this.game.add.sprite(0, 0, 'wall');
-        this.game.physics.arcade.enableBody(this.wall);
-        this.wall.body.allowGravity = false;
-        this.wall.visible = false;
+        this.leftWall = this.game.add.sprite(0, 0, 'wall');
+        this.game.physics.arcade.enableBody(this.leftWall);
+        this.leftWall.body.allowGravity = false;
+        this.leftWall.visible = false;
+
+        //right wall
+        this.rightWall = this.game.add.sprite(800, 0, 'wall');
+        this.game.physics.arcade.enableBody(this.rightWall);
+        this.rightWall.body.allowGravity = false;
+        this.rightWall.body.immovable = true;
+        this.rightWall.visible = false;
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
@@ -122,9 +129,11 @@ Runner.Game.prototype = {
     handlePlayerCollisions: function() {
         this.game.physics.arcade.collide(this.humanPlayer, this.enemies, this.enemyHit, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.ground, this.groundHit, null, this);
+        this.game.physics.arcade.collide(this.humanPlayer, this.rightWall);
         this.game.physics.arcade.overlap(this.humanPlayer, this.goodItems, this.itemHit, null, this);
         this.game.physics.arcade.overlap(this.humanPlayer, this.badItems, this.itemHit, null, this);
-        this.game.physics.arcade.overlap(this.humanPlayer, this.wall, this.enemyHit, null, this);
+        this.game.physics.arcade.overlap(this.humanPlayer, this.leftWall, this.enemyHit, null, this);
+
         if (!this.game.physics.arcade.collide(this.humanPlayer, this.obstacles, this.obstacleHit, null, this)) {
             this.humanPlayer.baseSpeed = 0;
         }
