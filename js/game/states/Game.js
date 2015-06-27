@@ -67,7 +67,7 @@ Runner.Game.prototype = {
         this.game.world.add(this.humanPlayer);
 
         //left wall
-        this.leftWall = this.game.add.sprite(0, 0, 'wall');
+        this.leftWall = this.game.add.sprite(-70, 0, 'wall');
         this.game.physics.arcade.enableBody(this.leftWall);
         this.leftWall.body.allowGravity = false;
         this.leftWall.visible = false;
