@@ -107,11 +107,17 @@ Runner.Game.prototype = {
         this.handleEnemyMovement();
 
         //Kollisionen und Bewegung für Spieler
-        if (!this.isGoalReached() && this.humanPlayer.alive) {
+        if (!this.isLevelEndReached() && this.humanPlayer.alive) {
             this.handlePlayerCollisions();
             this.handlePlayerMovement();
         } else {
             this.stopMovement();
+        }
+
+        if (this.isLevelEndReached()) {
+            if (!this.scoreboard.isShown) {
+                this.showScoreboard();
+            }
         }
     },
 
@@ -175,9 +181,9 @@ Runner.Game.prototype = {
         this.humanPlayer.alive = false;
         this.humanPlayer.animations.stop();
         this.humanPlayer.body.moves = false;
-        this.stopMovement();
         var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 560, angle: -90}, 300, Phaser.Easing.Circular.Out, true);
         deathTween.onComplete.add(this.showScoreboard, this);
+        this.stopMovement();
     },
 
     groundHit: function(player, ground) {
@@ -434,7 +440,7 @@ Runner.Game.prototype = {
 
     },
 
-    isGoalReached: function() {
+    isLevelEndReached: function() {
         return this.goalFlag && (this.humanPlayer.x > this.goalFlag.x + 20);
     },
 
@@ -446,8 +452,7 @@ Runner.Game.prototype = {
 
         this.levelGenerator.timer.stop();
 
-        if (this.goalFlag)
-            this.goalFlag.body.velocity = 0;
+        if (this.goalFlag) this.goalFlag.body.velocity = 0;
 
         this.humanPlayer.body.velocity.x = 0;
         this.humanPlayer.frame = 0;
@@ -458,7 +463,8 @@ Runner.Game.prototype = {
     },
 
     showScoreboard: function() {
-        this.scoreboard.show(this.score);
+        var isGoalWeightReached = this.weight <= this.goal;
+        this.scoreboard.show(this.score, this.isLevelEndReached(), isGoalWeightReached);
     },
 
     scoreReached: function(){
