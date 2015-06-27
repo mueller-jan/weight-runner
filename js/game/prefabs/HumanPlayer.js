@@ -11,8 +11,6 @@ var HumanPlayer = function(game, x, y) {
 
     this.rollSound = this.game.add.audio('roll');
 
-    this.body.collideWorldBounds = true;
-
     this.baseSpeed = 0;
     this.speedX = 150;
     this.speedY = 350;
