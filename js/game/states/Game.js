@@ -119,6 +119,7 @@ Runner.Game.prototype = {
         if (this.isLevelEndReached()) {
             if (!this.scoreboard.isShown) {
                 this.disablePlayer();
+                var goalTween = this.game.add.tween(this.goalFlag.scale).to({x: 0, y: 0}, 300, Phaser.Easing.Circular.Out, true);
                 this.showScoreboard();
             }
         }
@@ -402,6 +403,7 @@ Runner.Game.prototype = {
         x = x || this.spawnPositionX;
         y = y || 200;
         this.goalFlag = new GoalFlag(this.game, x, y);
+        this.goalFlag.anchor.setTo(0.5, 0.5);
         this.game.world.add(this.goalFlag);
     },
 

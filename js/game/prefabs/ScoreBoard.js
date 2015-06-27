@@ -10,7 +10,7 @@ Scoreboard.prototype.constructor = Scoreboard;
 
 Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
     this.isShown = true;
-    var bmd, background, gameoverString, weightReachedString, gameoverText, weightReachedText, scoreText, highScoreText, newHighScoreText, startText;
+    var bmd, badge, background, gameoverString, gameoverText, scoreText, highScoreText, newHighScoreText, startText;
 
     var style = { font: "20px Arial", fill: "#fff", align: "center" };
 
@@ -22,12 +22,13 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
     background.alpha = 0.5;
 
     this.add(background);
+
+
     if (endReached) {
-        gameoverString = 'Congrats, you finished the level!';
         if (goalweightReached) {
-            weightReachedString = 'You also reached the goal weight!';
+            badge = this.game.add.sprite(0, 100, 'badge_level_completed');
         } else {
-            weightReachedString = 'Unfortunately you did not reach your goal weight.';
+            gameoverString = 'Goal weight not reached.';
         }
         //var isNewHighScore = false;
         //var highscore = localStorage.getItem('highscore');
@@ -37,13 +38,9 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
         //    localStorage.setItem('highscore', highscore);
         //}
     } else {
-        gameoverString = 'You did not finish the level.';
-        weightReachedString = 'Unfortunately you did not reach your goal weight.';
+        badge = this.game.add.sprite(0, 100, 'badge_level_failed');
+        gameoverString = 'Level end not reached.';
     }
-
-    gameoverText = this.game.add.text(0, 100, gameoverString, style);
-    gameoverText.x = this.game.width/2 - (gameoverText.width / 2);
-    this.add(gameoverText);
 
     //if(isNewHighScore) {
     //    newHighScoreText = this.game.add.text(0, 100, 'New best weight!', style);
@@ -60,11 +57,15 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
     //highScoreText.x = this.game.width / 2 - (highScoreText.width / 2);
     //this.add(highScoreText);
 
-    weightReachedText = this.game.add.text(0, 200, weightReachedString, style);
-    weightReachedText.x = this.game.width/2 - (weightReachedText.width / 2);
-    this.add(weightReachedText);
+    badge.scale.set(0.5);
+    badge.x =  this.game.width/2 - (badge.width / 2);
+    this.add(badge);
 
-    startText = this.game.add.text(0, 300, 'Tap to play again!', style);
+    gameoverText = this.game.add.text(0, 450, gameoverString, style);
+    gameoverText.x = this.game.width/2 - (gameoverText.width / 2);
+    this.add(gameoverText);
+
+    startText = this.game.add.text(0, 500, 'Tap to continue!', style);
     startText.x = this.game.width / 2 - (startText.width / 2);
     this.add(startText);
 
