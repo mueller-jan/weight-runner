@@ -25,6 +25,7 @@ Runner.Preloader.prototype = {
         this.load.image('wall', 'assets/images/wall.png');
         this.load.image('badge_level_completed', 'assets/images/badge_level_completed.png');
         this.load.image('badge_level_failed', 'assets/images/badge_level_failed.png');
+        this.load.image('weightOMeter', 'assets/images/weightOMeter.png');
 
         this.load.image('button_level', 'assets/images/button_level.png');
         this.load.image('button', 'assets/images/button.png');
@@ -36,6 +37,7 @@ Runner.Preloader.prototype = {
         this.load.spritesheet('explosion', 'assets/images/explosion.png', 200, 200);
         this.load.spritesheet('sparkle', 'assets/images/sparkle.png', 170, 170);
         this.load.spritesheet('red_sparkle', 'assets/images/red_sparkle.png', 170, 170);
+        this.load.spritesheet('healthBar', 'assets/images/healthBar.png');
 
         //Audio laden
         this.load.audio('jump', 'assets/audio/jump2.wav');

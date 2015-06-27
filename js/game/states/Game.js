@@ -94,14 +94,14 @@ Runner.Game.prototype = {
         //Je nach StartScore wird das Startgewicht aus der Differenz von maxWeight und goal berechnet
         this.calculateWeight();
 
-        //Weighttext
-        var style = {font: "20px Arial", fill: "#fff", align: "center"};
-        this.weightText = this.game.add.text(30, 30, "weight: " + this.weight + " Goal: " + this.goal, style);
-
         this.goalFlag = null;
 
         //Scoreboard
         this.scoreboard = new Scoreboard(this.game);
+
+        //WeightOMeter
+        this.weightOMeter = new WeightOMeter(this.game, this.weight, this.score);
+        this.weightOMeter.show(this.weight);
 
         // Sounds
         this.jump = this.game.add.audio('jump');
@@ -114,12 +114,11 @@ Runner.Game.prototype = {
         this.roll = this.game.add.audio('roll');
 
 //        this.sounds = [this.jump, this.collectBadItem, this.collectGoodItem, this.death, this.hitEnemy, this.menuClick, this.obstacleDestroy, this.roll];
-        this.sounds.add(this.jump);
-
 
     },
 
     update: function () {
+
         //Kollisionen und Bewegung für Gegner
         this.handleEnemyCollisions();
         this.handleEnemyMovement();
@@ -243,17 +242,12 @@ Runner.Game.prototype = {
         this.calculateWeight();
 
         //Gewicht wird auf dem Weightboard angezeigt
-        this.weightText.text = "weight: " + this.weight + " goal: " + this.goal;
-        console.log(this.score);
+        this.weightOMeter.updateWeight(this.weight, this.score);
 
         //Überprüft ob "Gewonnen" oder "GameOver"
-        if (this.scoreReached()) {
-
-            this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " immer weiter so du Tier!";
-        }
 
         if (this.gameOver()) {
-            this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " fauler Sack!";
+            this.weightText.text = "weight: " + this.weight;
         }
 
         //Sound und Animationen für good/badItem
