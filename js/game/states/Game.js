@@ -97,6 +97,8 @@ Runner.Game.prototype = {
         var style = { font: "20px Arial", fill: "#fff", align: "center" };
         this.weightText = this.game.add.text(30, 30, "weight: " + this.weight + " Goal: " + this.goal, style);
 
+        this.goalFlag = null;
+
         //Scoreboard
         this.scoreboard = new Scoreboard(this.game);
     },
