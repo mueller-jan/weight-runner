@@ -49,6 +49,25 @@ Runner.Preloader.prototype = {
         this.load.audio('obstacleDestroy', 'assets/audio/obstacleDestroy2.wav');
         this.load.audio('roll', 'assets/audio/roll.wav');
 
+        // Sounds
+        Runner.jumpSound = this.game.add.audio('jump');
+        Runner.collectBadItem = this.game.add.audio('collectBadItem');
+        Runner.collectGoodItem = this.game.add.audio('collectGoodItem');
+        Runner.death = this.game.add.audio('death');
+        Runner.hitEnemy = this.game.add.audio('hitEnemy');
+        Runner.menuClick = this.game.add.audio('menuClick');
+        Runner.obstacleDestroy = this.game.add.audio('obstacleDestroy');
+        Runner.rollSound = this.game.add.audio('roll');
+
+        Runner.maxVolumeJump = 0.5;
+        Runner.maxVolumeCollectBadItem = 0.5;
+        Runner.maxVolumeCollectGoodItem = 0.3;
+        Runner.maxVolumeObstacleDestroy= 0.3;
+        Runner.maxVolumeDeath= 0.5;
+        Runner.maxVolumeHitEnemy= 0.5;
+        Runner.maxVolumeMenuClick= 0.5;
+        Runner.maxVolumeRoll = 0.3;
+
         this.load.text('level', 'assets/data/level.json');
 
         this.load.onLoadComplete.addOnce(this.onLoadComplete, this);

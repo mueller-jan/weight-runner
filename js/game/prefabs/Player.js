@@ -8,8 +8,6 @@ var Player = function(game, x, y, key) {
     this.baseSpeed = 0;
     this.speedX = 0;
     this.speedY = 0;
-
-    this.jumpSound = this.game.add.audio('jump');
 };
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -31,6 +29,6 @@ Player.prototype.jump = function() {
     //springen nur möglich, wenn Spieler den Boden berührt
     if (this.body.touching.down) {
         this.body.velocity.y = -this.speedY;
-        this.jumpSound.play('', 0, 0.5, false);
+        Runner.jumpSound.play();
     }
 };

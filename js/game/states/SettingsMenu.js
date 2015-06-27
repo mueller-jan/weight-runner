@@ -3,8 +3,9 @@
 Runner.SettingsMenu = function () {
     this.background = null;
     this.humanPlayer = null;
-    this.isSound = true;
-    this.soundBtnText = " Sound is ";
+    this.isSound = null;
+    this.soundBtnText = null;
+    this.soundBtnStartText = null;
 };
 
 Runner.SettingsMenu.prototype = {
@@ -26,7 +27,7 @@ Runner.SettingsMenu.prototype = {
         this.game.world.add(this.humanPlayer);
 
         // Header
-        var header = this.add.text(this.game.width/2, this.game.height / 5, "Settings", {
+        var header = this.add.text(this.game.width / 2, this.game.height / 5, "Settings", {
             font: "bold 90px Arial",
             fill: "#FF4136",
             stroke: "#FFFFFF",
@@ -39,7 +40,18 @@ Runner.SettingsMenu.prototype = {
         btn.anchor.setTo(0.5, 0.5);
         btn.scale.setTo(0.6, 0.5);
 
-        this.soundBtnText = this.add.text(this.game.width / 2, 250, this.soundBtnText + "ON", {
+        var isOn = localStorage.getItem("weight_runner_is_sound_on");
+
+        if (isOn != null) {
+            this.isSound = isOn === "true" ? true : false;
+        }
+        else {
+            this.isSound = true;
+        }
+
+        var state = this.isSound ? "ON" : "OFF";
+        this.soundBtnStartText = "Sound is ";
+        this.soundBtnText = this.add.text(this.game.width / 2, 250, this.soundBtnStartText + state, {
             font: "bold 36px Arial",
             fill: "#FF4136",
             stroke: "#FFFFFF",
@@ -47,6 +59,7 @@ Runner.SettingsMenu.prototype = {
         });
 
         this.soundBtnText.anchor.setTo(0.5, 0.5);
+        this.game.state.states['Game'].setSoundEnabled(this.isSound);
 
         // Backbutton
         this.addButton(this.game.width / 2, (this.game.height - this.game.height / 6), "Back", this.loadMainMenu, 'button')
@@ -71,9 +84,10 @@ Runner.SettingsMenu.prototype = {
 
     toggleSound: function () {
         this.isSound = !this.isSound;
-        var state = this.isSound ?  "ON" : "OFF";
-        this.soundBtnText.setText("Sound is " + state);
-        this.game.state.states['Game'].setSoundEnabled(state);
+        var state = this.isSound ? "ON" : "OFF";
+        this.soundBtnText.setText(this.soundBtnStartText + state);
+        this.game.state.states['Game'].setSoundEnabled(this.isSound);
+        localStorage.setItem("weight_runner_is_sound_on", this.isSound);
     },
 
     loadMainMenu: function () {
