@@ -73,6 +73,7 @@ Runner.SettingsMenu.prototype = {
         this.isSound = !this.isSound;
         var state = this.isSound ?  "ON" : "OFF";
         this.soundBtnText.setText("Sound is " + state);
+        this.game.state.states['Game'].setSoundEnabled(state);
     },
 
     loadMainMenu: function () {

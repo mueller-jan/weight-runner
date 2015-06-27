@@ -2,6 +2,7 @@
 
 Runner.Game = function () {
     console.log('init');
+    this.sounds = [];
 };
 
 Runner.Game.prototype = {
@@ -35,16 +36,16 @@ Runner.Game.prototype = {
         this.game.physics.arcade.gravity.y = 600;
 
         //Hintergrund
-        this.background = this.game.add.tileSprite(0,0,this.game.width, 512, 'background');
-        this.background.autoScroll(-100,0);
+        this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
+        this.background.autoScroll(-100, 0);
 
         //Mittelgrund
         this.midground = this.game.add.tileSprite(0, 420, this.game.width, this.game.height - 85, 'midground');
-        this.midground.autoScroll(-150,0);
+        this.midground.autoScroll(-150, 0);
 
         //Vordergrund
-        this.ground = this.game.add.tileSprite(0,this.game.height - 73, this.game.width, 73, 'ground');
-        this.ground.autoScroll(-200,0);
+        this.ground = this.game.add.tileSprite(0, this.game.height - 73, this.game.width, 73, 'ground');
+        this.ground.autoScroll(-200, 0);
 
         this.game.physics.arcade.enableBody(this.ground);
         this.ground.body.allowGravity = false;
@@ -94,13 +95,28 @@ Runner.Game.prototype = {
         this.calculateWeight();
 
         //Weighttext
-        var style = { font: "20px Arial", fill: "#fff", align: "center" };
+        var style = {font: "20px Arial", fill: "#fff", align: "center"};
         this.weightText = this.game.add.text(30, 30, "weight: " + this.weight + " Goal: " + this.goal, style);
 
         this.goalFlag = null;
 
         //Scoreboard
         this.scoreboard = new Scoreboard(this.game);
+
+        // Sounds
+        this.jump = this.game.add.audio('jump');
+        this.collectBadItem = this.game.add.audio('collectBadItem');
+        this.collectGoodItem = this.game.add.audio('collectGoodItem');
+        this.death = this.game.add.audio('death');
+        this.hitEnemy = this.game.add.audio('hitEnemy');
+        this.menuClick = this.game.add.audio('menuClick');
+        this.obstacleDestroy = this.game.add.audio('obstacleDestroy');
+        this.roll = this.game.add.audio('roll');
+
+//        this.sounds = [this.jump, this.collectBadItem, this.collectGoodItem, this.death, this.hitEnemy, this.menuClick, this.obstacleDestroy, this.roll];
+        this.sounds.add(this.jump);
+
+
     },
 
     update: function () {
@@ -119,16 +135,19 @@ Runner.Game.prototype = {
         if (this.isLevelEndReached()) {
             if (!this.scoreboard.isShown) {
                 this.disablePlayer();
-                var goalTween = this.game.add.tween(this.goalFlag.scale).to({x: 0, y: 0}, 300, Phaser.Easing.Circular.Out, true);
+                var goalTween = this.game.add.tween(this.goalFlag.scale).to({
+                    x: 0,
+                    y: 0
+                }, 300, Phaser.Easing.Circular.Out, true);
                 this.showScoreboard();
             }
         }
     },
 
-    handleEnemyCollisions: function() {
+    handleEnemyCollisions: function () {
         this.game.physics.arcade.collide(this.enemies, this.ground);
 
-        this.enemies.forEachAlive(function(enemy) {
+        this.enemies.forEachAlive(function (enemy) {
             if (!this.game.physics.arcade.collide(enemy, this.obstacles, this.obstacleHit, null, this)) {
                 enemy.baseSpeed = 0;
             }
@@ -136,7 +155,7 @@ Runner.Game.prototype = {
 
     },
 
-    handlePlayerCollisions: function() {
+    handlePlayerCollisions: function () {
         this.game.physics.arcade.collide(this.humanPlayer, this.enemies, this.enemyHit, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.ground, this.groundHit, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.rightWall);
@@ -149,8 +168,8 @@ Runner.Game.prototype = {
         }
     },
 
-    handleEnemyMovement: function() {
-        this.enemies.forEachAlive(function(enemy) {
+    handleEnemyMovement: function () {
+        this.enemies.forEachAlive(function (enemy) {
             enemy.moveLeft();
 
             //Gegner sollen zufällig springen
@@ -160,7 +179,7 @@ Runner.Game.prototype = {
         }, this);
     },
 
-    handlePlayerMovement: function() {
+    handlePlayerMovement: function () {
         // Geschwindigkeit zurücksetzen
         this.humanPlayer.resetSpeed();
 
@@ -179,19 +198,23 @@ Runner.Game.prototype = {
         }
     },
 
-    enemyHit: function(player, item) {
+    enemyHit: function (player, item) {
         console.log('enemy hit');
         this.disablePlayer();
-        var deathTween = this.game.add.tween(player).to({x: player.x - 90, y: 560, angle: -90}, 300, Phaser.Easing.Circular.Out, true);
+        var deathTween = this.game.add.tween(player).to({
+            x: player.x - 90,
+            y: 560,
+            angle: -90
+        }, 300, Phaser.Easing.Circular.Out, true);
         deathTween.onComplete.add(this.showScoreboard, this);
         this.stopMovement();
     },
 
-    groundHit: function(player, ground) {
+    groundHit: function (player, ground) {
 
     },
 
-    obstacleHit: function(player, obstacle) {
+    obstacleHit: function (player, obstacle) {
         //Player soll weiter rennen, wenn er sich auf dem Hindernis befindet
         //deshalb wird die negative Geschwindigkeit des Hindernisses auf die Player-Geschwindigkeit addiert
         player.baseSpeed = -obstacle.body.velocity.x;
@@ -202,17 +225,17 @@ Runner.Game.prototype = {
         }
     },
 
-    itemHit: function(player, item) {
+    itemHit: function (player, item) {
         item.kill();
         //Der Score wird je nach Item hoch oder runtergezählt
         this.score += item.scoreValue;
 
         //Score soll 100 nicht überschreiten
-        if(this.score >= 100){
+        if (this.score >= 100) {
             this.score = 100;
         }
 
-        if(this.score <= 0){
+        if (this.score <= 0) {
             this.score = 0;
         }
 
@@ -224,30 +247,30 @@ Runner.Game.prototype = {
         console.log(this.score);
 
         //Überprüft ob "Gewonnen" oder "GameOver"
-        if(this.scoreReached()){
+        if (this.scoreReached()) {
 
             this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " immer weiter so du Tier!";
         }
 
-        if(this.gameOver()){
+        if (this.gameOver()) {
             this.weightText.text = "weight: " + this.weight + " goal: " + this.goal + " fauler Sack!";
         }
 
         //Sound und Animationen für good/badItem
-        if(item instanceof GoodItem){
-            if(!this.goodItemSound.isPlaying)
+        if (item instanceof GoodItem) {
+            if (!this.goodItemSound.isPlaying)
                 this.goodItemSound.play('', 0, 0.3, false);
 
             this.createExplosion(item.x, item.y, 'sparkle');
         } else {
-            if(!this.badItemSound.isPlaying)
+            if (!this.badItemSound.isPlaying)
                 this.badItemSound.play('', 0, 0.5, false);
 
             this.createExplosion(item.x, item.y, 'red_sparkle');
         }
     },
 
-    dispose: function() {
+    dispose: function () {
         console.log('disposing scene');
 
         this.itemGenerator.timer.destroy();
@@ -255,7 +278,7 @@ Runner.Game.prototype = {
         this.levelGenerator.timer.destroy();
     },
 
-    generateLevel: function() {
+    generateLevel: function () {
         if (this.currentLevelStep < this.levelData.objectData.length) {
             var currentElement = this.levelData.objectData[this.currentLevelStep];
             for (var i = 0; i < currentElement.length; i++) {
@@ -283,14 +306,14 @@ Runner.Game.prototype = {
         this.currentLevelStep++;
     },
 
-    generateItems: function() {
+    generateItems: function () {
         //1 zu 3 Chance auf schlechtes Item
         var r = this.game.rnd.integer() % 3;
         var isGood = r != 1;
 
-        if(!this.previousItemType || this.previousItemType < 3) {
+        if (!this.previousItemType || this.previousItemType < 3) {
             var itemType = this.game.rnd.integer() % 5;
-            switch(itemType) {
+            switch (itemType) {
                 case 0:
                     //kein Item wird erzeugt
                     break;
@@ -323,7 +346,7 @@ Runner.Game.prototype = {
         }
     },
 
-    createItem: function(x, y, isGood) {
+    createItem: function (x, y, isGood) {
         x = x || this.spawnPositionX;
         y = y || this.game.rnd.integerInRange(this.game.world.height - 140, this.game.world.height - 192);
 
@@ -340,24 +363,24 @@ Runner.Game.prototype = {
         return item;
     },
 
-    createItemGroup: function(columns, rows, isGood) {
+    createItemGroup: function (columns, rows, isGood) {
         var itemSpawnY = this.game.rnd.integerInRange(50, this.game.world.height - 192);
         var itemRowCounter = 0;
         var itemColumnCounter = 0;
         var item;
-        for(var i = 0; i < columns * rows; i++) {
+        for (var i = 0; i < columns * rows; i++) {
             item = this.createItem(this.spawnPositionX, itemSpawnY, isGood);
             item.x = item.x + (itemColumnCounter * item.width) + (itemColumnCounter * this.itemSpacingX);
             item.y = item.y + (itemRowCounter * item.height) + (itemRowCounter * this.itemSpacingY);
             itemColumnCounter++;
-            if(i+1 >= columns && (i+1) % columns === 0) {
+            if (i + 1 >= columns && (i + 1) % columns === 0) {
                 itemRowCounter++;
                 itemColumnCounter = 0;
             }
         }
     },
 
-    generateObstacles: function() {
+    generateObstacles: function () {
         //1 zu 2 Chance, dass ein Hindernis erzeugt wird
         var r = this.game.rnd.integer() % 2;
         if (r == 1) {
@@ -365,7 +388,7 @@ Runner.Game.prototype = {
         }
     },
 
-    createObstacle: function(x, y) {
+    createObstacle: function (x, y) {
         x = x || this.spawnPositionX;
         y = y || this.game.rnd.integerInRange(this.game.world.height - 100, this.game.world.height - 192);
 
@@ -380,11 +403,11 @@ Runner.Game.prototype = {
         return obstacle;
     },
 
-    createObstacleGroup: function(columns, rows) {
+    createObstacleGroup: function (columns, rows) {
 
     },
 
-    createEnemy: function(x, y) {
+    createEnemy: function (x, y) {
         x = x || this.spawnPositionX;
         y = y || 400;
 
@@ -399,7 +422,7 @@ Runner.Game.prototype = {
         return enemy;
     },
 
-    createGoalFlag: function(x, y) {
+    createGoalFlag: function (x, y) {
         x = x || this.spawnPositionX;
         y = y || 200;
         this.goalFlag = new GoalFlag(this.game, x, y);
@@ -407,7 +430,7 @@ Runner.Game.prototype = {
         this.game.world.add(this.goalFlag);
     },
 
-    createExplosion: function(x, y, type) {
+    createExplosion: function (x, y, type) {
         var explosion = this.explosions.getFirstExists(false);
         if (!explosion) {
             explosion = this.explosions.add(new Explosion(this.game, 0, 0, type));
@@ -420,33 +443,33 @@ Runner.Game.prototype = {
         }
     },
 
-    render: function() {
+    render: function () {
         //this.game.debug.body(this.humanPlayer);
     },
 
-    calculateWeight: function(){
+    calculateWeight: function () {
         //Faktor zwischen Weight und Score errechnen
         var weightDifference = this.maxWeight - this.goal;
-        var multiples = 100/weightDifference;
+        var multiples = 100 / weightDifference;
 
         //Gewicht abhängig von der Scoreveränderung hoch- bzw. runterzählen
-        while(this.previousScore <= this.score - multiples){
+        while (this.previousScore <= this.score - multiples) {
             this.weight -= 1;
             this.previousScore += multiples;
         }
 
-        while(this.previousScore >= this.score + multiples){
+        while (this.previousScore >= this.score + multiples) {
             this.weight += 1;
             this.previousScore -= multiples;
         }
 
     },
 
-    isLevelEndReached: function() {
+    isLevelEndReached: function () {
         return this.goalFlag && (this.humanPlayer.x > this.goalFlag.x + 20);
     },
 
-    stopMovement: function() {
+    stopMovement: function () {
         this.enemies.setAll('body.velocity.x', 0);
         this.goodItems.setAll('body.velocity.x', 0);
         this.badItems.setAll('body.velocity.x', 0);
@@ -464,32 +487,41 @@ Runner.Game.prototype = {
         this.background.stopScroll();
     },
 
-    disablePlayer: function() {
+    disablePlayer: function () {
         this.humanPlayer.body.enabled = false;
         this.humanPlayer.alive = false;
         this.humanPlayer.body.moves = false;
         this.humanPlayer.animations.stop();
     },
 
-    scoreReached: function(){
+    scoreReached: function () {
         //Überprüfen ob das Scorelimit erreich wurde
         var result = false;
-        if(this.score == 100){
+        if (this.score == 100) {
             result = true;
         }
         return result;
     },
 
-    gameOver: function(){
+    gameOver: function () {
 
         var result = false;
-        if(this.score == 0){
+        if (this.score == 0) {
             result = true;
         }
         return result;
     },
 
-    showScoreboard: function() {
+    showScoreboard: function () {
         this.scoreboard.show(this.score, this.isLevelEndReached(), this.scoreReached());
+    },
+
+    setSoundEnabled: function (state) {
+        console.log("State: " + state);
+        console.log("sounds lenght: " + this.sounds.length);
+        for (var i = 0; i < this.sounds.length; i++) {
+            this.sounds[i].mute = state;
+            console.log("State: " + i);
+        }
     }
 };
