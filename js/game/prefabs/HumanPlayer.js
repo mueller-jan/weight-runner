@@ -27,6 +27,6 @@ HumanPlayer.prototype.constructor = HumanPlayer;
 HumanPlayer.prototype.roll = function() {
     this.animations.play("roll");
     this.isRolling = true;
-    if(!this.rollSound.isPlaying)
-        this.rollSound.play('', 0, 0.3, false);
+    if(!Runner.rollSound.isPlaying)
+        Runner.rollSound.play()
 };

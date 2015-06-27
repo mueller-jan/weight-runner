@@ -4,7 +4,7 @@ Runner.SettingsMenu = function () {
     this.background = null;
     this.humanPlayer = null;
     this.isSound = true;
-    this.soundBtnText = " Sound is ";
+    this.soundBtnText = null;
 };
 
 Runner.SettingsMenu.prototype = {
@@ -39,7 +39,8 @@ Runner.SettingsMenu.prototype = {
         btn.anchor.setTo(0.5, 0.5);
         btn.scale.setTo(0.6, 0.5);
 
-        this.soundBtnText = this.add.text(this.game.width / 2, 250, this.soundBtnText + "ON", {
+        this.soundBtnText = "Sound is ";
+        this.soundBtnText = this.add.text(this.game.width / 2, 250, this.soundBtnText + (this.isSound ? "ON" : "OFF"), {
             font: "bold 36px Arial",
             fill: "#FF4136",
             stroke: "#FFFFFF",
@@ -71,9 +72,9 @@ Runner.SettingsMenu.prototype = {
 
     toggleSound: function () {
         this.isSound = !this.isSound;
-        var state = this.isSound ?  "ON" : "OFF";
-        this.soundBtnText.setText("Sound is " + state);
-        this.game.state.states['Game'].setSoundEnabled(state);
+        this.soundBtnText.setText("");
+        this.soundBtnText.setText("Sound is " + (this.isSound ?  "ON" : "OFF"));
+        this.game.state.states['Game'].setSoundEnabled(this.isSound);
     },
 
     loadMainMenu: function () {

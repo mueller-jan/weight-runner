@@ -2,7 +2,6 @@
 
 Runner.Game = function () {
     console.log('init');
-    this.sounds = [];
 };
 
 Runner.Game.prototype = {
@@ -51,11 +50,6 @@ Runner.Game.prototype = {
         this.ground.body.allowGravity = false;
         this.ground.body.immovable = true;
 
-        //Gamesound
-        this.goodItemSound = this.game.add.audio('collectGoodItem');
-        this.badItemSound = this.game.add.audio('collectBadItem');
-        this.obstacleDestroySound = this.game.add.audio('obstacleDestroy');
-
         //Gruppen erzeugen
         this.goodItems = this.game.add.group();
         this.badItems = this.game.add.group();
@@ -102,21 +96,6 @@ Runner.Game.prototype = {
 
         //Scoreboard
         this.scoreboard = new Scoreboard(this.game);
-
-        // Sounds
-        this.jump = this.game.add.audio('jump');
-        this.collectBadItem = this.game.add.audio('collectBadItem');
-        this.collectGoodItem = this.game.add.audio('collectGoodItem');
-        this.death = this.game.add.audio('death');
-        this.hitEnemy = this.game.add.audio('hitEnemy');
-        this.menuClick = this.game.add.audio('menuClick');
-        this.obstacleDestroy = this.game.add.audio('obstacleDestroy');
-        this.roll = this.game.add.audio('roll');
-
-//        this.sounds = [this.jump, this.collectBadItem, this.collectGoodItem, this.death, this.hitEnemy, this.menuClick, this.obstacleDestroy, this.roll];
-        this.sounds.add(this.jump);
-
-
     },
 
     update: function () {
@@ -220,7 +199,7 @@ Runner.Game.prototype = {
         player.baseSpeed = -obstacle.body.velocity.x;
         if (player.isRolling) {
             obstacle.kill();
-            this.obstacleDestroySound.play('', 0, 0.3, false);
+            Runner.obstacleDestroy.play();
             this.createExplosion(obstacle.x, obstacle.y, 'explosion');
         }
     },
@@ -258,13 +237,13 @@ Runner.Game.prototype = {
 
         //Sound und Animationen für good/badItem
         if (item instanceof GoodItem) {
-            if (!this.goodItemSound.isPlaying)
-                this.goodItemSound.play('', 0, 0.3, false);
+            if (!Runner.collectGoodItem.isPlaying)
+                Runner.collectGoodItem.play();
 
             this.createExplosion(item.x, item.y, 'sparkle');
         } else {
-            if (!this.badItemSound.isPlaying)
-                this.badItemSound.play('', 0, 0.5, false);
+            if (!Runner.collectBadItem.isPlaying)
+                Runner.collectBadItem.play();
 
             this.createExplosion(item.x, item.y, 'red_sparkle');
         }
@@ -517,11 +496,28 @@ Runner.Game.prototype = {
     },
 
     setSoundEnabled: function (state) {
-        console.log("State: " + state);
-        console.log("sounds lenght: " + this.sounds.length);
-        for (var i = 0; i < this.sounds.length; i++) {
-            this.sounds[i].mute = state;
-            console.log("State: " + i);
-        }
+        Runner.jumpSound.volume = state ? Runner.maxVolumeJump : 0;
+        Runner.jumpSound.mute = !state;
+
+        Runner.collectBadItem.volume= state ? Runner.maxVolumeCollectBadItem : 0;
+        Runner.collectBadItem.mute = !state;
+
+        Runner.collectGoodItem.volume= state ? Runner.maxVolumeCollectGoodItem: 0;
+        Runner.collectGoodItem.mute = !state;
+
+        Runner.death.volume= state ? Runner.maxVolumeDeath: 0;
+        Runner.death.mute = !state;
+
+        Runner.hitEnemy.volume= state ? Runner.maxVolumeHitEnemy: 0;
+        Runner.hitEnemy.mute = !state;
+
+        Runner.menuClick.volume= state ? Runner.maxVolumeMenuClick: 0;
+        Runner.menuClick.mute = !state;
+
+        Runner.obstacleDestroy.volume= state ? Runner.maxVolumeObstacleDestroy: 0;
+        Runner.obstacleDestroy.mute = !state;
+
+        Runner.rollSound.volume= state ?  Runner.maxVolumeRoll : 0;
+        Runner.rollSound.mute = !state;
     }
 };
