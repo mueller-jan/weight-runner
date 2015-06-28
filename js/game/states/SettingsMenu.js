@@ -40,15 +40,6 @@ Runner.SettingsMenu.prototype = {
         btn.anchor.setTo(0.5, 0.5);
         btn.scale.setTo(0.6, 0.5);
 
-        var isOn = localStorage.getItem("weight_runner_is_sound_on");
-
-        if (isOn != null) {
-            this.isSound = isOn === "true" ? true : false;
-        }
-        else {
-            this.isSound = true;
-        }
-
         var state = this.isSound ? "ON" : "OFF";
         this.soundBtnStartText = "Sound is ";
         this.soundBtnText = this.add.text(this.game.width / 2, 250, this.soundBtnStartText + state, {
@@ -88,6 +79,7 @@ Runner.SettingsMenu.prototype = {
         this.soundBtnText.setText(this.soundBtnStartText + state);
         this.game.state.states['Game'].setSoundEnabled(this.isSound);
         localStorage.setItem("weight_runner_is_sound_on", this.isSound);
+        Runner.menuClick.play();
     },
 
     loadMainMenu: function () {
