@@ -28,7 +28,7 @@ Runner.Preloader.prototype = {
         this.load.image('weightOMeterBackground', 'assets/images/weightOMeterBackground.png');
 
         this.load.image('button_level', 'assets/images/button_level.png');
-        this.load.image('button_level', 'assets/images/button_level_locked.png');
+        this.load.image('button_level_locked', 'assets/images/button_levels_locked.png');
         this.load.image('button', 'assets/images/button.png');
 
         this.load.spritesheet('good_items', 'assets/images/good_items.png', 48, 48);

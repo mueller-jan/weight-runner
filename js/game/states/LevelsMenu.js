@@ -25,17 +25,42 @@ Runner.LevelsMenu.prototype = {
         this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 120);
         this.game.world.add(this.humanPlayer);
 
+        // Load localstorage variable last level
+        var lastLevel = localStorage.getItem("weight_runner_last_level");
+
+        if (lastLevel != null) {
+            this.lastLevel = parseInt(localStorage.getItem("weight_runner_last_level"));
+        }
+        else {
+            localStorage.setItem("weight_runner_last_level", "1")
+            this.lastLevel = 1;
+        }
+
         // Buttons
         var startY = 250;
+        var imageName = null;
         for (var i = 1; i <= this.maxLevels; i++) {
-
-            if (i % 2 == 1) {
-                this.addButton(this.game.width / 2 - 40, startY, i, this.loadLevel, 'button_level')
+            if (i <= this.lastLevel) {
+                imageName = 'button_level';
+                if (i % 2 == 1) {
+                    this.addButton(this.game.width / 2 - 40, startY, i, this.loadLevel, imageName)
+                }
+                else {
+                    this.addButton(this.game.width / 2 + 55, startY, i, this.loadLevel, imageName);
+                    startY += 85;
+                }
             }
             else {
-                this.addButton(this.game.width / 2 + 55, startY, i, this.loadLevel, 'button_level');
-                startY += 85;
+                imageName = "button_level_locked"
+                if (i % 2 == 1) {
+                    this.addButton(this.game.width / 2 - 40, startY, "", this.loadLevel, imageName)
+                }
+                else {
+                    this.addButton(this.game.width / 2 + 55, startY, "", this.loadLevel, imageName);
+                    startY += 85;
+                }
             }
+
         }
 
         // Header
@@ -50,16 +75,6 @@ Runner.LevelsMenu.prototype = {
         // Backbutton
         this.addButton(this.game.width / 2, (this.game.height - this.game.height / 6), "Back", this.loadMainMenu, 'button')
 
-        var lastLevel = localStorage.getItem("weight_runner_last_level");
-
-        if (lastLevel != null) {
-            this.lastLevel =  parseInt(localStorage.getItem("weight_runner_last_level"));
-        }
-        else {
-            localStorage.setItem("weight_runner_last_level", "1")
-            this.lastLevel = 1;
-        }
-
 
     },
 
@@ -68,7 +83,6 @@ Runner.LevelsMenu.prototype = {
         btn.anchor.setTo(0.5, 0.5);
         btn.scale.setTo(0.6, 0.5);
         btn.name = text;
-
         var txt = this.add.text(x, y, text, {
             font: "bold 36px Arial",
             fill: "#FF4136",
@@ -76,11 +90,10 @@ Runner.LevelsMenu.prototype = {
             strokeThickness: 3
         });
         txt.anchor.setTo(0.5, 0.5);
+
     },
 
     loadLevel: function (button) {
-        console.log('Load level : ' + button.name);
-        console.log("buttonName:  " + parseInt(button.name) + ", lastLevel: " + this.lastLevel);
         Runner.menuClick.play();
         if (parseInt(button.name) <= this.lastLevel) {
             this.game.state.states['Game'].startingLevel = 'level_' + button.name;
