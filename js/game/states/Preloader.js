@@ -69,6 +69,10 @@ Runner.Preloader.prototype = {
         Runner.maxVolumeRoll = 0.3;
 
         this.load.text('level', 'assets/data/level.json');
+        this.load.text('level_1', 'assets/data/level_1.json');
+        this.load.text('level_2', 'assets/data/level_2.json');
+        this.load.text('level_3', 'assets/data/level_3.json');
+        this.load.text('level_4', 'assets/data/level_4.json');
 
         this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     },

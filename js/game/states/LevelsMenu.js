@@ -70,6 +70,8 @@ Runner.LevelsMenu.prototype = {
     loadLevel: function (button) {
         console.log('Load level : ' + button.name);
         Runner.menuClick.play();
+        this.game.state.states['Game'].startingLevel = 'level_' +  button.name;
+        this.game.state.start('Game');
 
     },
 

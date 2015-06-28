@@ -2,26 +2,13 @@
 
 Runner.Game = function () {
     console.log('init');
+    this.startingLevel = 'level';
 };
 
 Runner.Game.prototype = {
     create: function () {
-        this.levelData = JSON.parse(this.game.cache.getText('level'));
-
-        if (!this.levelData) {
-            //wenn kein Level geladen werden kann, Level zufällig generieren
-            //Loops zum zufälligen Erzeugen von Items und Hindernissen
-            this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
-            this.itemGenerator.timer.start();
-
-            this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateObstacles, this);
-            this.obstacleGenerator.timer.start();
-        } else {
-            this.currentLevelStep = 0;
-            //Level aus JSON-Datei lesen
-            this.levelGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateLevel, this);
-            this.levelGenerator.timer.start();
-        }
+        // Load first Level
+        this.loadLevel(this.startingLevel);
 
         this.spawnPositionX = this.game.width + 64;
         this.itemSpacingX = 10;
@@ -518,5 +505,23 @@ Runner.Game.prototype = {
 
         Runner.rollSound.volume= state ?  Runner.maxVolumeRoll : 0;
         Runner.rollSound.mute = !state;
+    },
+    loadLevel : function(levelName){
+        this.levelData = JSON.parse(this.game.cache.getText(levelName));
+        if (!this.levelData) {
+            //wenn kein Level geladen werden kann, Level zufällig generieren
+            //Loops zum zufälligen Erzeugen von Items und Hindernissen
+            this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
+            this.itemGenerator.timer.start();
+
+            this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateObstacles, this);
+            this.obstacleGenerator.timer.start();
+        } else {
+            this.currentLevelStep = 0;
+            //Level aus JSON-Datei lesen
+            this.levelGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateLevel, this);
+            this.levelGenerator.timer.start();
+        }
+
     }
 };
