@@ -69,11 +69,13 @@ Runner.LevelsMenu.prototype = {
 
     loadLevel: function (button) {
         console.log('Load level : ' + button.name);
+        Runner.menuClick.play();
 
     },
 
     loadMainMenu: function () {
         this.state.start('MainMenu');
+        Runner.menuClick.play();
 
     },
 

@@ -35,26 +35,38 @@ Runner.MainMenu.prototype = {
         this.addButton(this.game.width/2, 250, 'Start new game', this.startGame);
         this.addButton(this.game.width/2, 350, 'Load levels', this.loadLevelMenu);
         this.addButton(this.game.width/2, 450, 'Settings', this.loadSettingsMenu);
+
+        var isOn = localStorage.getItem("weight_runner_is_sound_on");
+
+        if (isOn != null) {
+            this.game.state.states['SettingsMenu'].isSound = isOn === "true" ? true : false;
+        }
+        else {
+            this.game.state.states['SettingsMenu'].isSound = true;
+        }
+        this.game.state.states['Game'].setSoundEnabled(this.game.state.states['SettingsMenu'].isSound);
     },
 
     addButton: function(x, y, text, callback) {
         var btn = this.add.button(x, y, 'button', callback, this);
         btn.anchor.setTo(0.5, 0.5);
         btn.scale.setTo(0.6, 0.5);
-
         var txt = this.add.text(x, y, text, { font: "bold 36px Arial", fill: "#FF4136", stroke: "#FFFFFF", strokeThickness: 3 });
         txt.anchor.setTo(0.5, 0.5);
     },
 
     startGame: function() {
+        Runner.menuClick.play();
         this.game.state.start('Game');
     },
 
     loadLevelMenu: function() {
+        Runner.menuClick.play();
         this.state.start('LevelsMenu');
     },
 
     loadSettingsMenu: function() {
+        Runner.menuClick.play();
         this.state.start('SettingsMenu');
     },
 
