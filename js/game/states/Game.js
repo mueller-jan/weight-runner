@@ -88,18 +88,14 @@ Runner.Game.prototype = {
         //Je nach StartScore wird das Startgewicht aus der Differenz von maxWeight und goal berechnet
         this.calculateWeight();
 
-        //Weighttext
-        var style = {font: "20px Arial", fill: "#fff", align: "center"};
-        this.weightText = this.game.add.text(30, 30, "weight: " + this.weight + " Goal: " + this.goal, style);
-
         this.goalFlag = null;
 
         //Scoreboard
         this.scoreboard = new Scoreboard(this.game);
 
         //WeightOMeter
-        this.weightOMeter = new WeightOMeter(this.game, this.weight, this.score);
-        this.weightOMeter.show(this.weight);
+        this.weightOMeter = new WeightOMeter(this.game, 30, 20);
+        this.weightOMeter.showBackground(this.weight);
 
 //        this.sounds = [this.jump, this.collectBadItem, this.collectGoodItem, this.death, this.hitEnemy, this.menuClick, this.obstacleDestroy, this.roll];
 
@@ -235,7 +231,7 @@ Runner.Game.prototype = {
         //Überprüft ob "Gewonnen" oder "GameOver"
 
         if (this.gameOver()) {
-            this.weightText.text = "weight: " + this.weight;
+
         }
 
         //Sound und Animationen für good/badItem
