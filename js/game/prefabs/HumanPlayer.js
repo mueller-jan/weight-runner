@@ -18,6 +18,7 @@ var HumanPlayer = function(game, x, y) {
     this.events.onAnimationComplete.add(function(){
         this.animations.play('run');
         this.isRolling = false;
+        this.body.setSize(70, 140, 20, 0);
     }, this);
 };
 
@@ -27,6 +28,7 @@ HumanPlayer.prototype.constructor = HumanPlayer;
 HumanPlayer.prototype.roll = function() {
     this.animations.play("roll");
     this.isRolling = true;
+    this.body.setSize(70, 70, 20, 50);
     if(!Runner.rollSound.isPlaying)
         Runner.rollSound.play()
 };
