@@ -69,7 +69,7 @@ Runner.Game.prototype = {
         this.goal = 150;
 
         //Score und vorheriger Score (benötigt für die Gewichtszählung)
-        this.score = 15;
+        this.score = 10;
         this.previousScore = 0;
 
         //Je nach StartScore wird das Startgewicht aus der Differenz von maxWeight und goal berechnet
@@ -81,8 +81,25 @@ Runner.Game.prototype = {
         this.scoreboard = new Scoreboard(this.game);
 
         //WeightOMeter
-        this.weightOMeter = new WeightOMeter(this.game, 30, 20);
-        this.weightOMeter.showBackground(this.weight);
+        this.weightOMeterBackground = this.game.add.image(30, 47, 'weightOMeterBackground');
+        this.weightOMeterBackground.anchor.y = 0.5;
+
+        this.positiveWeightBar = new PositiveWeightBar(this.game, 56, 47);
+        this.game.world.add(this.positiveWeightBar);
+
+        this.negativeWeightBar = new NegativeWeightBar(this.game, 56, 47);
+        this.game.world.add(this.negativeWeightBar);
+
+        this.start_goal_marker = this.game.add.image(30, 47, 'start_goal_marker');
+        this.start_goal_marker.anchor.y = 0.5;
+
+        var style = {font: "17px Arial", fill: "#000000", align: "center"};
+        this.game.add.text(38, 10, "Start", style);
+        this.game.add.text(248, 10, "Ziel", style);
+        this.weightText = this.game.add.text(115, 60, "weight: " + this.weight, style);
+
+        this.positiveWeightBar.createCropRectangle();
+        this.negativeWeightBar.createCropRectangle();
 
     },
 
@@ -211,7 +228,15 @@ Runner.Game.prototype = {
         this.calculateWeight();
 
         //Gewicht wird auf dem Weightboard angezeigt
-        this.weightOMeter.updateWeight(this.weight, this.score);
+        this.weightText.text = "weight: " + this.weight;
+        console.log(this.score);
+
+        //Je nach Score verschiebt sich das Weightboar positiv oder negativ
+        if(this.score >= 10) {
+            this.positiveWeightBar.updateWeight(this.score);
+        }else{
+            this.negativeWeightBar.updateWeight(this.score);
+        }
 
         //Überprüft ob "Gewonnen" oder "GameOver"
 
@@ -460,7 +485,7 @@ Runner.Game.prototype = {
     scoreReached: function () {
         //Überprüfen ob das Scorelimit erreich wurde
         var result = false;
-        if (this.score == 100) {
+        if (this.score >= 90) {
             result = true;
         }
         return result;
