@@ -28,6 +28,7 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
         if (goalweightReached) {
             badge = this.game.add.sprite(0, 100, 'badge_level_completed');
         } else {
+            badge = this.game.add.sprite(0, 100, 'badge_level_failed');
             gameoverString = 'Goal weight not reached.';
         }
         //var isNewHighScore = false;
