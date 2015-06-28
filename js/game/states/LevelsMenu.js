@@ -4,6 +4,7 @@ Runner.LevelsMenu = function () {
     this.background = null;
     this.humanPlayer = null;
     this.maxLevels = 4;
+    this.lastLevel = 1;
 };
 
 Runner.LevelsMenu.prototype = {
@@ -29,7 +30,7 @@ Runner.LevelsMenu.prototype = {
         for (var i = 1; i <= this.maxLevels; i++) {
 
             if (i % 2 == 1) {
-                this.addButton(this.game.width / 2 -40, startY, i, this.loadLevel, 'button_level')
+                this.addButton(this.game.width / 2 - 40, startY, i, this.loadLevel, 'button_level')
             }
             else {
                 this.addButton(this.game.width / 2 + 55, startY, i, this.loadLevel, 'button_level');
@@ -38,7 +39,7 @@ Runner.LevelsMenu.prototype = {
         }
 
         // Header
-        var header = this.add.text(this.game.width/2, this.game.height / 5, "Levels", {
+        var header = this.add.text(this.game.width / 2, this.game.height / 5, "Levels", {
             font: "bold 90px Arial",
             fill: "#FF4136",
             stroke: "#FFFFFF",
@@ -48,6 +49,16 @@ Runner.LevelsMenu.prototype = {
 
         // Backbutton
         this.addButton(this.game.width / 2, (this.game.height - this.game.height / 6), "Back", this.loadMainMenu, 'button')
+
+        var lastLevel = localStorage.getItem("weight_runner_last_level");
+
+        if (lastLevel != null) {
+            this.lastLevel =  parseInt(localStorage.getItem("weight_runner_last_level"));
+        }
+        else {
+            localStorage.setItem("weight_runner_last_level", "1")
+            this.lastLevel = 1;
+        }
 
 
     },
@@ -69,9 +80,12 @@ Runner.LevelsMenu.prototype = {
 
     loadLevel: function (button) {
         console.log('Load level : ' + button.name);
+        console.log("buttonName:  " + parseInt(button.name) + ", lastLevel: " + this.lastLevel);
         Runner.menuClick.play();
-        this.game.state.states['Game'].startingLevel = 'level_' +  button.name;
-        this.game.state.start('Game');
+        if (parseInt(button.name) <= this.lastLevel) {
+            this.game.state.states['Game'].startingLevel = 'level_' + button.name;
+            this.game.state.start('Game');
+        }
 
     },
 

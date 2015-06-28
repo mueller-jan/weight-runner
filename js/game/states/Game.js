@@ -84,8 +84,6 @@ Runner.Game.prototype = {
         this.weightOMeter = new WeightOMeter(this.game, 30, 20);
         this.weightOMeter.showBackground(this.weight);
 
-//        this.sounds = [this.jump, this.collectBadItem, this.collectGoodItem, this.death, this.hitEnemy, this.menuClick, this.obstacleDestroy, this.roll];
-
     },
 
     update: function () {
