@@ -29,6 +29,7 @@ Runner.Preloader.prototype = {
         this.load.image('start_goal_marker', 'assets/images/start_goal.png');
         this.load.image('positiveWeightBar', 'assets/images/positiveWeightBar.png');
         this.load.image('negativeWeightBar', 'assets/images/negativeWeightBar.png');
+        //this.load.image('yellowWeightBar', 'assets/images/yellowWeightBar.png');
 
         this.load.image('button_level', 'assets/images/button_level.png');
         this.load.image('button_level_locked', 'assets/images/button_levels_locked.png');
@@ -43,7 +44,8 @@ Runner.Preloader.prototype = {
         this.load.spritesheet('red_sparkle', 'assets/images/red_sparkle.png', 170, 170);
 
         //Audio laden
-        this.load.audio('jump', 'assets/audio/jump2.wav');
+        this.load.audio('playerJump', 'assets/audio/jump1.wav');
+        this.load.audio('enemyJump', 'assets/audio/jump2.wav');
         this.load.audio('collectBadItem', 'assets/audio/collectBadItem.wav');
         this.load.audio('collectGoodItem', 'assets/audio/collectGoodItem.wav');
         this.load.audio('death', 'assets/audio/death.wav');
@@ -51,25 +53,32 @@ Runner.Preloader.prototype = {
         this.load.audio('menuClick', 'assets/audio/menuClick.wav');
         this.load.audio('obstacleDestroy', 'assets/audio/obstacleDestroy2.wav');
         this.load.audio('roll', 'assets/audio/roll.wav');
+        this.load.audio('backgroundMusic', 'assets/audio/backgroundMusic.mp3');
+
 
         // Sounds
-        Runner.jumpSound = this.game.add.audio('jump');
+        Runner.playerJump = this.game.add.audio('playerJump');
+        Runner.enemyJump = this.game.add.audio('enemyJump')
         Runner.collectBadItem = this.game.add.audio('collectBadItem');
         Runner.collectGoodItem = this.game.add.audio('collectGoodItem');
-        Runner.death = this.game.add.audio('death');
+        Runner.deathSound = this.game.add.audio('death');
         Runner.hitEnemy = this.game.add.audio('hitEnemy');
         Runner.menuClick = this.game.add.audio('menuClick');
         Runner.obstacleDestroy = this.game.add.audio('obstacleDestroy');
         Runner.rollSound = this.game.add.audio('roll');
+        Runner.backgroundMusic = this.game.add.audio('backgroundMusic', 1, true);
 
-        Runner.maxVolumeJump = 0.5;
+        Runner.maxVolumePlayerJump = 0.5;
+        Runner.maxVolumeEnemyJump = 0.5;
         Runner.maxVolumeCollectBadItem = 0.5;
         Runner.maxVolumeCollectGoodItem = 0.3;
         Runner.maxVolumeObstacleDestroy= 0.3;
-        Runner.maxVolumeDeath= 0.5;
+        Runner.maxVolumeDeathSound= 0.5;
         Runner.maxVolumeHitEnemy= 0.5;
         Runner.maxVolumeMenuClick= 0.5;
         Runner.maxVolumeRoll = 0.3;
+        Runner.maxVolumeBackgroundMusic = 1;
+
 
         this.load.text('level', 'assets/data/level.json');
         this.load.text('level_1', 'assets/data/level_1.json');

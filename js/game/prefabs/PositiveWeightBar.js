@@ -18,7 +18,7 @@ PositiveWeightBar.prototype.createCropRectangle = function(){
 }
 
 PositiveWeightBar.prototype.updateWeight = function(score){
-
+    
     var widthCalculate = ((score-10)/100)*258;
 
     this.widthRectangle.width = widthCalculate;

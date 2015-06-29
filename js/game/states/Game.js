@@ -84,22 +84,32 @@ Runner.Game.prototype = {
         this.weightOMeterBackground = this.game.add.image(30, 47, 'weightOMeterBackground');
         this.weightOMeterBackground.anchor.y = 0.5;
 
-        this.positiveWeightBar = new PositiveWeightBar(this.game, 56, 47);
+        this.positiveWeightBar = new PositiveWeightBar(this.game, 56, 46.5);
         this.game.world.add(this.positiveWeightBar);
 
-        this.negativeWeightBar = new NegativeWeightBar(this.game, 56, 47);
+        this.negativeWeightBar = new NegativeWeightBar(this.game, 56, 46.5);
         this.game.world.add(this.negativeWeightBar);
 
         this.start_goal_marker = this.game.add.image(30, 47, 'start_goal_marker');
         this.start_goal_marker.anchor.y = 0.5;
 
-        var style = {font: "17px Arial", fill: "#000000", align: "center"};
-        this.game.add.text(38, 10, "Start", style);
-        this.game.add.text(248, 10, "Ziel", style);
+        var style = {font: "17px Roboto", fill: "#000", align: "center"};
+        var headlineStyle = {font: "20px Roboto", fill: "#000", align: "center"};
+        this.weightOMeterStart = this.game.add.text(38, 60, "Start", style);
+        //this.weightOMeterStart.anchor.x = 0.5;
+
+        this.weightOMeterGoal = this.game.add.text(260, 60, "Ziel", style);
+        this.weightOMeterGoal.anchor.x = 0.5;
+
+        this.weightOMeterHeadline = this.game.add.text(90, 10, "Weight-O-Meter", headlineStyle);
+        //this.weightOMeterHeadline.anchor.x = 0.5;
         this.weightText = this.game.add.text(115, 60, "weight: " + this.weight, style);
 
         this.positiveWeightBar.createCropRectangle();
         this.negativeWeightBar.createCropRectangle();
+
+        //Hintergrundmusik starten
+        Runner.backgroundMusic.play();
 
     },
 
@@ -185,6 +195,7 @@ Runner.Game.prototype = {
 
     enemyHit: function (player, item) {
         console.log('enemy hit');
+        Runner.deathSound.play();
         this.disablePlayer();
         var deathTween = this.game.add.tween(player).to({
             x: player.x - 90,
@@ -505,17 +516,17 @@ Runner.Game.prototype = {
     },
 
     setSoundEnabled: function (state) {
-        Runner.jumpSound.volume = state ? Runner.maxVolumeJump : 0;
-        Runner.jumpSound.mute = !state;
+        Runner.playerJump.volume = state ? Runner.maxVolumePlayerJump : 0;
+        Runner.playerJump.mute = !state;
+
+        Runner.enemyJump.volume = state ? Runner.maxVolumeEnemyJump : 0;
+        Runner.enemyJump.mute = !state;
 
         Runner.collectBadItem.volume= state ? Runner.maxVolumeCollectBadItem : 0;
         Runner.collectBadItem.mute = !state;
 
         Runner.collectGoodItem.volume= state ? Runner.maxVolumeCollectGoodItem: 0;
         Runner.collectGoodItem.mute = !state;
-
-        Runner.death.volume= state ? Runner.maxVolumeDeath: 0;
-        Runner.death.mute = !state;
 
         Runner.hitEnemy.volume= state ? Runner.maxVolumeHitEnemy: 0;
         Runner.hitEnemy.mute = !state;
@@ -526,8 +537,14 @@ Runner.Game.prototype = {
         Runner.obstacleDestroy.volume= state ? Runner.maxVolumeObstacleDestroy: 0;
         Runner.obstacleDestroy.mute = !state;
 
+        Runner.deathSound.volume= state ? Runner.maxVolumeDeathSound: 0;
+        Runner.deathSound.mute = !state;
+
         Runner.rollSound.volume= state ?  Runner.maxVolumeRoll : 0;
         Runner.rollSound.mute = !state;
+
+        Runner.backgroundMusic.volume= state ?  Runner.maxVolumeBackgroundMusic : 0;
+        Runner.backgroundMusic.mute = !state;
     },
     loadLevel : function(levelName){
         this.levelData = JSON.parse(this.game.cache.getText(levelName));

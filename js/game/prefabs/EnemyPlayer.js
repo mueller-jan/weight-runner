@@ -20,3 +20,11 @@ EnemyPlayer.prototype.constructor = EnemyPlayer;
 EnemyPlayer.prototype.onRevived = function() {
     this.animations.play('left', 10, true);
 };
+
+EnemyPlayer.prototype.jump = function() {
+    //springen nur möglich, wenn Spieler den Boden berührt
+    if (this.body.touching.down) {
+        this.body.velocity.y = -this.speedY;
+        Runner.enemyJump.play();
+    }
+}

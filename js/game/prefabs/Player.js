@@ -29,6 +29,6 @@ Player.prototype.jump = function() {
     //springen nur möglich, wenn Spieler den Boden berührt
     if (this.body.touching.down) {
         this.body.velocity.y = -this.speedY;
-        Runner.jumpSound.play();
+        Runner.playerJump.play();
     }
 };
