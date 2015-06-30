@@ -7,6 +7,8 @@ Runner.Game = function () {
 
 Runner.Game.prototype = {
     create: function () {
+
+
         // Load first Level
         this.loadLevel(this.startingLevel);
 
