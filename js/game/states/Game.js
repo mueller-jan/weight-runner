@@ -11,8 +11,6 @@ Runner.Game.prototype = {
         this.loadLevel(this.startingLevel);
 
         this.spawnPositionX = this.game.width + 64;
-        this.itemSpacingX = 10;
-        this.itemSpacingY = 10;
 
         // Welt-Grenzen setzen
         this.game.world.bounds = new Phaser.Rectangle(-100, 0, this.game.width + 300, this.game.height);
