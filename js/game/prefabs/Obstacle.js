@@ -1,9 +1,9 @@
 'use strict';
-var Obstacle = function(game, x, y, key)
+var Obstacle = function(game, x, y, isDestructible)
 {
-    //wenn ein kein key übergeben wurde, dann key auf setzen
-    key = key || 'box';
+    this.isDestructible = isDestructible;
 
+    var key = isDestructible ? 'box' : 'metal_box';
     Phaser.Sprite.call(this, game, x, y, key);
 
     this.anchor.setTo(0.5, 0.5);

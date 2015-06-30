@@ -2,14 +2,12 @@
 
 Runner.Game = function () {
     console.log('init');
-    this.startingLevel = 'level';
+    this.startingLevel = 'level_1';
 };
 
 Runner.Game.prototype = {
     create: function () {
-
-
-        // Load first Level
+        // Level laden
         this.loadLevel(this.startingLevel);
 
         this.spawnPositionX = this.game.width + 64;
@@ -42,6 +40,7 @@ Runner.Game.prototype = {
         //Gruppen erzeugen
         this.goodItems = this.game.add.group();
         this.badItems = this.game.add.group();
+        this.destructableObstacles = this.game.add.group();
         this.obstacles = this.game.add.group();
         this.explosions = this.game.add.group();
         this.enemies = this.game.add.group();
@@ -141,18 +140,18 @@ Runner.Game.prototype = {
         }
     },
 
-    handleEnemyCollisions: function () {
+    handleEnemyCollisions: function() {
         this.game.physics.arcade.collide(this.enemies, this.ground);
 
         this.enemies.forEachAlive(function (enemy) {
-            if (!this.game.physics.arcade.collide(enemy, this.obstacles, this.obstacleHit, null, this)) {
+            if (!this.collidesWithObstacle(enemy)) {
                 enemy.baseSpeed = 0;
             }
         }, this);
 
     },
 
-    handlePlayerCollisions: function () {
+    handlePlayerCollisions: function() {
         this.game.physics.arcade.collide(this.humanPlayer, this.enemies, this.enemyHit, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.ground, this.groundHit, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.rightWall);
@@ -160,9 +159,13 @@ Runner.Game.prototype = {
         this.game.physics.arcade.overlap(this.humanPlayer, this.badItems, this.itemHit, null, this);
         this.game.physics.arcade.overlap(this.humanPlayer, this.leftWall, this.enemyHit, null, this);
 
-        if (!this.game.physics.arcade.collide(this.humanPlayer, this.obstacles, this.obstacleHit, null, this)) {
+        if (!this.collidesWithObstacle(this.humanPlayer)) {
             this.humanPlayer.baseSpeed = 0;
         }
+    },
+
+    collidesWithObstacle: function(player) {
+        return this.game.physics.arcade.collide(player, this.destructableObstacles, this.obstacleHit, null, this) || this.game.physics.arcade.collide(player, this.obstacles, this.obstacleHit, null, this);
     },
 
     handleEnemyMovement: function () {
@@ -216,7 +219,7 @@ Runner.Game.prototype = {
         //Player soll weiter rennen, wenn er sich auf dem Hindernis befindet
         //deshalb wird die negative Geschwindigkeit des Hindernisses auf die Player-Geschwindigkeit addiert
         player.baseSpeed = -obstacle.body.velocity.x;
-        if (player.isRolling) {
+        if ((player.isRolling) && (obstacle.isDestructible)) {
             obstacle.kill();
             Runner.obstacleDestroy.play();
             this.createExplosion(obstacle.x, obstacle.y, 'explosion');
@@ -285,18 +288,21 @@ Runner.Game.prototype = {
             for (var i = 0; i < currentElement.length; i++) {
                 switch (currentElement[i].type) {
                     case 0:
-                        this.createObstacle(this.spawnPositionX, currentElement[i].y);
+                        this.createObstacle(this.spawnPositionX, currentElement[i].y, true);
                         break;
                     case 1:
-                        this.createItem(this.spawnPositionX, currentElement[i].y, true);
+                        this.createObstacle(this.spawnPositionX, currentElement[i].y, false);
                         break;
                     case 2:
-                        this.createItem(this.spawnPositionX, currentElement[i].y, false);
+                        this.createItem(this.spawnPositionX, currentElement[i].y, true);
                         break;
                     case 3:
-                        this.createEnemy(this.spawnPositionX, currentElement[i].y);
+                        this.createItem(this.spawnPositionX, currentElement[i].y, false);
                         break;
                     case 4:
+                        this.createEnemy(this.spawnPositionX, currentElement[i].y);
+                        break;
+                    case 5:
                         this.createGoalFlag(this.spawnPositionX, currentElement[i].y);
                         break;
                     default:
@@ -305,46 +311,6 @@ Runner.Game.prototype = {
             }
         }
         this.currentLevelStep++;
-    },
-
-    generateItems: function () {
-        //1 zu 3 Chance auf schlechtes Item
-        var r = this.game.rnd.integer() % 3;
-        var isGood = r != 1;
-
-        if (!this.previousItemType || this.previousItemType < 3) {
-            var itemType = this.game.rnd.integer() % 5;
-            switch (itemType) {
-                case 0:
-                    //kein Item wird erzeugt
-                    break;
-                case 1:
-                case 2:
-                    //bei 1 oder 2 wird ein einzelnes Item erzeugt
-                    this.createItem(null, null, isGood);
-                    break;
-                case 3:
-                    //eine kleine Gruppe von Items erzeugen
-                    this.createItemGroup(2, 2, isGood);
-                    break;
-                case 4:
-                    //große Gruppe von Items erzeugen
-                    this.createItemGroup(6, 2, isGood);
-                    break;
-                default:
-                    this.previousItemType = 0;
-                    break;
-            }
-            this.previousItemType = itemType;
-        } else {
-            if (this.previousItemType === 4) {
-                // die vorige Gruppe war groß,
-                // nächsten 2 Erzeugungen sollen übersprungen werden
-                this.previousItemType = 3;
-            } else {
-                this.previousItemType = 0;
-            }
-        }
     },
 
     createItem: function (x, y, isGood) {
@@ -364,40 +330,17 @@ Runner.Game.prototype = {
         return item;
     },
 
-    createItemGroup: function (columns, rows, isGood) {
-        var itemSpawnY = this.game.rnd.integerInRange(50, this.game.world.height - 192);
-        var itemRowCounter = 0;
-        var itemColumnCounter = 0;
-        var item;
-        for (var i = 0; i < columns * rows; i++) {
-            item = this.createItem(this.spawnPositionX, itemSpawnY, isGood);
-            item.x = item.x + (itemColumnCounter * item.width) + (itemColumnCounter * this.itemSpacingX);
-            item.y = item.y + (itemRowCounter * item.height) + (itemRowCounter * this.itemSpacingY);
-            itemColumnCounter++;
-            if (i + 1 >= columns && (i + 1) % columns === 0) {
-                itemRowCounter++;
-                itemColumnCounter = 0;
-            }
-        }
-    },
-
-    generateObstacles: function () {
-        //1 zu 2 Chance, dass ein Hindernis erzeugt wird
-        var r = this.game.rnd.integer() % 2;
-        if (r == 1) {
-            this.createObstacle();
-        }
-    },
-
-    createObstacle: function (x, y) {
+    createObstacle: function (x, y, isDestructible) {
         x = x || this.spawnPositionX;
         y = y || this.game.rnd.integerInRange(this.game.world.height - 100, this.game.world.height - 192);
 
+        var obstacles = isDestructible ? this.destructableObstacles : this.obstacles;
+
         //Obstacles recyclen
-        var obstacle = this.obstacles.getFirstExists(false);
+        var obstacle = obstacles.getFirstExists(false);
         if (!obstacle) {
-            obstacle = new Obstacle(this.game, 0, 0, 'box');
-            this.obstacles.add(obstacle);
+            obstacle = new Obstacle(this.game, 0, 0, isDestructible);
+            obstacles.add(obstacle);
         }
         obstacle.reset(x, y);
         obstacle.revive();
@@ -475,6 +418,7 @@ Runner.Game.prototype = {
         this.goodItems.setAll('body.velocity.x', 0);
         this.badItems.setAll('body.velocity.x', 0);
         this.obstacles.setAll('body.velocity.x', 0);
+        this.destructableObstacles.setAll('body.velocity.x', 0);
 
         this.levelGenerator.timer.stop();
 
@@ -548,22 +492,12 @@ Runner.Game.prototype = {
         Runner.backgroundMusic.volume= state ?  Runner.maxVolumeBackgroundMusic : 0;
         Runner.backgroundMusic.mute = !state;
     },
+
     loadLevel : function(levelName){
         this.levelData = JSON.parse(this.game.cache.getText(levelName));
-        if (!this.levelData) {
-            //wenn kein Level geladen werden kann, Level zufällig generieren
-            //Loops zum zufälligen Erzeugen von Items und Hindernissen
-            this.itemGenerator = this.game.time.events.loop(Phaser.Timer.SECOND, this.generateItems, this);
-            this.itemGenerator.timer.start();
-
-            this.obstacleGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateObstacles, this);
-            this.obstacleGenerator.timer.start();
-        } else {
-            this.currentLevelStep = 0;
-            //Level aus JSON-Datei lesen
-            this.levelGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateLevel, this);
-            this.levelGenerator.timer.start();
-        }
-
+        this.currentLevelStep = 0;
+        //Level aus JSON-Datei lesen
+        this.levelGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateLevel, this);
+        this.levelGenerator.timer.start();
     }
 };

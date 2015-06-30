@@ -12,8 +12,8 @@ var HumanPlayer = function(game, x, y) {
     this.rollSound = this.game.add.audio('roll');
 
     this.baseSpeed = 0;
-    this.speedX = 150;
-    this.speedY = 350;
+    this.speedX = 50;
+    this.speedY = 280;
 
     this.events.onAnimationComplete.add(function(){
         this.animations.play('run');

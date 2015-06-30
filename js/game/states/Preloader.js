@@ -21,6 +21,7 @@ Runner.Preloader.prototype = {
         this.load.image('ground', 'assets/images/tiles/ground.png');
 
         this.load.image('box', 'assets/images/box.png');
+        this.load.image('metal_box', 'assets/images/metal_box.png');
         this.load.image('goal_flag', 'assets/images/goal_flag.png');
         this.load.image('wall', 'assets/images/wall.png');
         this.load.image('badge_level_completed', 'assets/images/badge_level_completed.png');
