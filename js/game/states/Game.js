@@ -3,6 +3,9 @@
 Runner.Game = function () {
     console.log('init');
     this.startingLevel = 'level_1';
+    this.backgroundName = 'background';
+    this.midgroundName = 'midground';
+    this.groundName = 'ground';
 };
 
 Runner.Game.prototype = {
@@ -20,15 +23,15 @@ Runner.Game.prototype = {
         this.game.physics.arcade.gravity.y = 600;
 
         //Hintergrund
-        this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
+        this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, this.backgroundName);
         this.background.autoScroll(-100, 0);
 
         //Mittelgrund
-        this.midground = this.game.add.tileSprite(0, 420, this.game.width, this.game.height - 85, 'midground');
+        this.midground = this.game.add.tileSprite(0, 420, this.game.width, this.game.height - 85, this.midgroundName);
         this.midground.autoScroll(-150, 0);
 
         //Vordergrund
-        this.ground = this.game.add.tileSprite(0, this.game.height - 73, this.game.width, 73, 'ground');
+        this.ground = this.game.add.tileSprite(0, this.game.height - 73, this.game.width, 73, this.groundName);
         this.ground.autoScroll(-200, 0);
 
         this.game.physics.arcade.enableBody(this.ground);

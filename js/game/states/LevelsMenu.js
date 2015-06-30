@@ -97,6 +97,9 @@ Runner.LevelsMenu.prototype = {
         Runner.menuClick.play();
         if (parseInt(button.name) <= this.lastLevel) {
             this.game.state.states['Game'].startingLevel = 'level_' + button.name;
+            this.game.state.states['Game'].groundName = 'groundStreet';
+            this.game.state.states['Game'].backgroundName = 'backgroundFullStreet';
+            this.game.state.states['Game'].midgroundName = 'midgroundFullStreet';
             this.game.state.start('Game');
         }
 
