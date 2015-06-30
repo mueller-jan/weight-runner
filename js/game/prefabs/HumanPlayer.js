@@ -16,13 +16,9 @@ var HumanPlayer = function(game, x, y) {
     this.speedY = 280;
 
     this.events.onAnimationComplete.add(function() {
-        if (this.body.touching.up) {
-            this.roll();
-        } else {
-            this.animations.play('run');
-            this.isRolling = false;
-            this.body.setSize(70, 140, 20, 0);
-        }
+        this.animations.play('run');
+        this.isRolling = false;
+        this.body.setSize(70, 140, 20, 0);
     }, this);
 };
 
