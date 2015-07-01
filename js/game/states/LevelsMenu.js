@@ -22,7 +22,8 @@ Runner.LevelsMenu.prototype = {
         this.ground.autoScroll(-200, 0);
 
         //Player
-        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 120);
+        this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 170);
+        this.humanPlayer.body.allowGravity = false;
         this.game.world.add(this.humanPlayer);
 
         // Load localstorage variable last level

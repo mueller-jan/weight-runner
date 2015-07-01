@@ -8,7 +8,6 @@ var HumanPlayer = function(game, x, y) {
 
     this.scale.set(0.7);
     this.body.setSize(70, 140, 20, 0);
-
     this.rollSound = this.game.add.audio('roll');
 
     this.baseSpeed = 0;

@@ -21,6 +21,7 @@ Runner.MainMenu.prototype = {
 
         //Player
         this.humanPlayer = new HumanPlayer(this.game, 32, this.game.height - 170);
+        this.humanPlayer.body.allowGravity = false;
         this.game.world.add(this.humanPlayer);
 
         // Header

@@ -44,7 +44,7 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
     gameoverText.x = this.game.width/2 - (gameoverText.width / 2);
     this.add(gameoverText);
 
-    startText = this.game.add.text(0, 500, 'Tap to continue!', style);
+    startText = this.game.add.text(0, 500, 'Enter continue\nESC Main-Menu', style);
     startText.x = this.game.width / 2 - (startText.width / 2);
     this.add(startText);
 
@@ -52,10 +52,18 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
 
     this.game.add.tween(this).to({y: 0}, 1000, Phaser.Easing.Bounce.Out, true);
 
-    this.game.input.onDown.addOnce(this.restart, this);
+    var enterKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+    enterKey.onDown.addOnce(this.restart, this);
+
+    var escapeKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+    escapeKey.onDown.addOnce(this.backToMenu, this);
 
 };
 
 Scoreboard.prototype.restart = function() {
     this.game.state.start('Game', true, false);
+};
+
+Scoreboard.prototype.backToMenu = function() {
+    this.game.state.start('MainMenu', true, false);
 };

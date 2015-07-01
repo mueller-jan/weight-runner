@@ -114,6 +114,9 @@ Runner.Game.prototype = {
         //Scoreboard
         this.scoreboard = new Scoreboard(this.game);
 
+        var escapeKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        escapeKey.onDown.addOnce(this.backToMenu, this);
+
     },
 
     update: function () {
@@ -277,11 +280,8 @@ Runner.Game.prototype = {
         }
     },
 
-    dispose: function () {
-        console.log('disposing scene');
-
-        this.itemGenerator.timer.destroy();
-        this.obstacleGenerator.timer.destroy();
+    shutdown: function () {
+        console.log('shutting down');
         this.levelGenerator.timer.destroy();
     },
 
@@ -502,5 +502,9 @@ Runner.Game.prototype = {
         //Level aus JSON-Datei lesen
         this.levelGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 0.5, this.generateLevel, this);
         this.levelGenerator.timer.start();
+    },
+
+    backToMenu : function() {
+        this.game.state.start('MainMenu', true, false);
     }
 };
