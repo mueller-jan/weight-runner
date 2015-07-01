@@ -64,10 +64,10 @@ Runner.LevelsMenu.prototype = {
         }
 
         // Header
-        var header = this.add.text(this.game.width / 2, this.game.height / 5, "Levels", {
-            font: "bold 90px Arial",
-            fill: "#FF4136",
-            stroke: "#FFFFFF",
+        var header = this.add.text(this.game.width/2, this.game.height / 8, "Settings", {
+            font: "bold 60px Fredoka One",
+            fill: "#FFF",
+            stroke: "#000",
             strokeThickness: 3
         });
         header.anchor.setTo(0.5, 0.5);
@@ -81,14 +81,9 @@ Runner.LevelsMenu.prototype = {
     addButton: function (x, y, text, callback, btnId) {
         var btn = this.add.button(x, y, btnId, callback, this);
         btn.anchor.setTo(0.5, 0.5);
-        btn.scale.setTo(0.6, 0.5);
+        btn.scale.setTo(0.6, 0.6);
         btn.name = text;
-        var txt = this.add.text(x, y, text, {
-            font: "bold 36px Arial",
-            fill: "#FF4136",
-            stroke: "#FFFFFF",
-            strokeThickness: 3
-        });
+        var txt = this.add.text(x, y, text, { font: "bold 22px Fredoka One", fill: "#FFF", stroke: "#000", strokeThickness: 3 });
         txt.anchor.setTo(0.5, 0.5);
 
     },
@@ -97,6 +92,9 @@ Runner.LevelsMenu.prototype = {
         Runner.menuClick.play();
         if (parseInt(button.name) <= this.lastLevel) {
             this.game.state.states['Game'].startingLevel = 'level_' + button.name;
+            this.game.state.states['Game'].groundName = 'groundStreet';
+            this.game.state.states['Game'].backgroundName = 'backgroundFullStreet';
+            this.game.state.states['Game'].midgroundName = 'midgroundFullStreet';
             this.game.state.start('Game');
         }
 

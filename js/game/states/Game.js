@@ -3,6 +3,9 @@
 Runner.Game = function () {
     console.log('init');
     this.startingLevel = 'level_1';
+    this.backgroundName = 'background';
+    this.midgroundName = 'midground';
+    this.groundName = 'ground';
 };
 
 Runner.Game.prototype = {
@@ -20,15 +23,15 @@ Runner.Game.prototype = {
         this.game.physics.arcade.gravity.y = 600;
 
         //Hintergrund
-        this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
+        this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, this.backgroundName);
         this.background.autoScroll(-100, 0);
 
         //Mittelgrund
-        this.midground = this.game.add.tileSprite(0, 420, this.game.width, this.game.height - 85, 'midground');
+        this.midground = this.game.add.tileSprite(0, 420, this.game.width, this.game.height - 85, this.midgroundName);
         this.midground.autoScroll(-150, 0);
 
         //Vordergrund
-        this.ground = this.game.add.tileSprite(0, this.game.height - 73, this.game.width, 73, 'ground');
+        this.ground = this.game.add.tileSprite(0, this.game.height - 73, this.game.width, 73, this.groundName);
         this.ground.autoScroll(-200, 0);
 
         this.game.physics.arcade.enableBody(this.ground);
@@ -76,9 +79,6 @@ Runner.Game.prototype = {
 
         this.goalFlag = null;
 
-        //Scoreboard
-        this.scoreboard = new Scoreboard(this.game);
-
         //WeightOMeter
         this.weightOMeterBackground = this.game.add.image(30, 47, 'weightOMeterBackground');
         this.weightOMeterBackground.anchor.y = 0.5;
@@ -92,8 +92,9 @@ Runner.Game.prototype = {
         this.start_goal_marker = this.game.add.image(30, 47, 'start_goal_marker');
         this.start_goal_marker.anchor.y = 0.5;
 
-        var style = {font: "17px Roboto", fill: "#000", align: "center"};
-        var headlineStyle = {font: "20px Roboto", fill: "#000", align: "center"};
+        var style = { font: "bold 17px Fredoka One", fill: "#fff", align: "center" , stroke: "#000", strokeThickness: 3};
+        //var style = {font: "17px Roboto", fill: "#000", align: "center"};
+        var headlineStyle = {font: "bold 20px Fredoka One", fill: "#fff", align: "center" , stroke: "#000", strokeThickness: 3};
         this.weightOMeterStart = this.game.add.text(38, 60, "Start", style);
         //this.weightOMeterStart.anchor.x = 0.5;
 
@@ -109,6 +110,9 @@ Runner.Game.prototype = {
 
         //Hintergrundmusik starten
         Runner.backgroundMusic.play();
+
+        //Scoreboard
+        this.scoreboard = new Scoreboard(this.game);
 
     },
 
@@ -205,6 +209,12 @@ Runner.Game.prototype = {
             y: 560,
             angle: -90
         }, 300, Phaser.Easing.Circular.Out, true);
+        if (this.goalFlag) {
+            var hideFlagTween = this.game.add.tween(this.goalFlag.scale).to({
+                x: 0,
+                y: 0
+            }, 300, Phaser.Easing.Circular.Out, true);
+        }
         deathTween.onComplete.add(this.showScoreboard, this);
         this.stopMovement();
     },

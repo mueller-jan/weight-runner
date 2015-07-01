@@ -6,8 +6,12 @@ Runner.Preloader = function() {
     this.ready = false;
 };
 
+
 Runner.Preloader.prototype = {
     preload: function () {
+        //Google WebFont Loader script
+        this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
         //Ladebalken
         this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'preloadBar');
         this.preloadBar.anchor.setTo(0.5, 0.5);
@@ -31,6 +35,10 @@ Runner.Preloader.prototype = {
         this.load.image('positiveWeightBar', 'assets/images/positiveWeightBar.png');
         this.load.image('negativeWeightBar', 'assets/images/negativeWeightBar.png');
         //this.load.image('yellowWeightBar', 'assets/images/yellowWeightBar.png');
+        this.load.image('groundStreet', 'assets/images/tiles/ground_street.png');
+        this.load.image('backgroundFullStreet', 'assets/images/tiles/background_full_street.png');
+        this.load.image('midgroundFullStreet', 'assets/images/tiles/midground_street.png');
+        this.load.image('introduction', 'assets/images/introduction.png');
 
         this.load.image('button_level', 'assets/images/button_level.png');
         this.load.image('button_level_locked', 'assets/images/button_levels_locked.png');
@@ -55,7 +63,6 @@ Runner.Preloader.prototype = {
         this.load.audio('obstacleDestroy', 'assets/audio/obstacleDestroy2.wav');
         this.load.audio('roll', 'assets/audio/roll.wav');
         this.load.audio('backgroundMusic', 'assets/audio/backgroundMusic.mp3');
-
 
         // Sounds
         Runner.playerJump = this.game.add.audio('playerJump');

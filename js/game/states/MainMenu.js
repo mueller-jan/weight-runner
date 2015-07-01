@@ -24,17 +24,18 @@ Runner.MainMenu.prototype = {
         this.game.world.add(this.humanPlayer);
 
         // Header
-        var header = this.add.text(this.game.width/2, this.game.height / 5, "Weight-Runner", {
-            font: "bold 90px Arial",
-            fill: "#FF4136",
-            stroke: "#FFFFFF",
+        var header = this.add.text(this.game.width/2, this.game.height / 8, "Weight-Runner", {
+            font: "bold 60px Fredoka One",
+            fill: "#FFF",
+            stroke: "#000",
             strokeThickness: 3
         });
         header.anchor.setTo(0.5, 0.5);
 
-        this.addButton(this.game.width/2, 250, 'Start new game', this.startGame);
-        this.addButton(this.game.width/2, 350, 'Load levels', this.loadLevelMenu);
-        this.addButton(this.game.width/2, 450, 'Settings', this.loadSettingsMenu);
+        this.addButton(this.game.width/2, 200, 'Start new game', this.startGame);
+        this.addButton(this.game.width/2, 300, 'Load levels', this.loadLevelMenu);
+        this.addButton(this.game.width/2, 400, 'Settings', this.loadSettingsMenu);
+        this.addButton(this.game.width/2, 500, 'How to play', this.showIntroduction);
 
         var isOn = localStorage.getItem("weight_runner_is_sound_on");
 
@@ -45,13 +46,16 @@ Runner.MainMenu.prototype = {
             this.game.state.states['SettingsMenu'].isSound = true;
         }
         this.game.state.states['Game'].setSoundEnabled(this.game.state.states['SettingsMenu'].isSound);
+
+        //Einführung
+        this.introduction = new Introduction(this.game);
     },
 
     addButton: function(x, y, text, callback) {
         var btn = this.add.button(x, y, 'button', callback, this);
         btn.anchor.setTo(0.5, 0.5);
-        btn.scale.setTo(0.6, 0.5);
-        var txt = this.add.text(x, y, text, { font: "bold 36px Arial", fill: "#FF4136", stroke: "#FFFFFF", strokeThickness: 3 });
+        btn.scale.setTo(0.6, 0.6);
+        var txt = this.add.text(x, y, text, { font: "bold 22px Fredoka One", fill: "#FFF", stroke: "#000", strokeThickness: 3});
         txt.anchor.setTo(0.5, 0.5);
     },
 
@@ -68,6 +72,10 @@ Runner.MainMenu.prototype = {
     loadSettingsMenu: function() {
         Runner.menuClick.play();
         this.state.start('SettingsMenu');
+    },
+
+    showIntroduction: function() {
+      this.introduction.show();
     },
 
     update: function () {
