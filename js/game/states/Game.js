@@ -101,7 +101,7 @@ Runner.Game.prototype = {
         this.weightOMeterGoal = this.game.add.text(260, 60, "Ziel", style);
         this.weightOMeterGoal.anchor.x = 0.5;
 
-        this.weightOMeterHeadline = this.game.add.text(90, 10, "Weight-O-Meter", headlineStyle);
+        this.weightOMeterHeadline = this.game.add.text(80, 10, "Weight-O-Meter", headlineStyle);
         //this.weightOMeterHeadline.anchor.x = 0.5;
         this.weightText = this.game.add.text(115, 60, "weight: " + this.weight, style);
 
