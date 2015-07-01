@@ -117,6 +117,7 @@ Runner.Game.prototype = {
     },
 
     update: function () {
+        this.humanPlayer.baseSpeed = 0;
 
         //Kollisionen und Bewegung für Gegner
         this.handleEnemyCollisions();
@@ -126,6 +127,7 @@ Runner.Game.prototype = {
         if (!this.isLevelEndReached() && this.humanPlayer.alive) {
             this.handlePlayerCollisions();
             this.handlePlayerMovement();
+
         } else {
             this.stopMovement();
         }
@@ -143,14 +145,12 @@ Runner.Game.prototype = {
     },
 
     handleEnemyCollisions: function() {
-        this.game.physics.arcade.collide(this.enemies, this.ground);
-
         this.enemies.forEachAlive(function (enemy) {
-            if (!this.collidesWithObstacle(enemy)) {
-                enemy.baseSpeed = 0;
-            }
+            enemy.baseSpeed = 0;
         }, this);
-
+        this.game.physics.arcade.collide(this.enemies, this.ground);
+        this.game.physics.arcade.collide(this.enemies, this.destructableObstacles, this.obstacleHit, null, this);
+        this.game.physics.arcade.collide(this.enemies, this.obstacles, this.obstacleHit, null, this);
     },
 
     handlePlayerCollisions: function() {
@@ -160,15 +160,10 @@ Runner.Game.prototype = {
         this.game.physics.arcade.overlap(this.humanPlayer, this.goodItems, this.itemHit, null, this);
         this.game.physics.arcade.overlap(this.humanPlayer, this.badItems, this.itemHit, null, this);
         this.game.physics.arcade.overlap(this.humanPlayer, this.leftWall, this.enemyHit, null, this);
-
-        if (!this.collidesWithObstacle(this.humanPlayer)) {
-            this.humanPlayer.baseSpeed = 0;
-        }
+        this.game.physics.arcade.collide(this.humanPlayer, this.destructableObstacles, this.obstacleHit, null, this);
+        this.game.physics.arcade.collide(this.humanPlayer, this.obstacles, this.obstacleHit, null, this);
     },
 
-    collidesWithObstacle: function(player) {
-        return this.game.physics.arcade.collide(player, this.destructableObstacles, this.obstacleHit, null, this) || this.game.physics.arcade.collide(player, this.obstacles, this.obstacleHit, null, this);
-    },
 
     handleEnemyMovement: function () {
         this.enemies.forEachAlive(function (enemy) {
@@ -225,7 +220,7 @@ Runner.Game.prototype = {
 
     obstacleHit: function (player, obstacle) {
         //Player soll weiter rennen, wenn er sich auf dem Hindernis befindet
-        //deshalb wird die negative Geschwindigkeit des Hindernisses auf die Player-Geschwindigkeit addiert
+        //deshalb wird die Geschwindigkeit des Hindernisses von der Player-Geschwindigkeit abgezogen
         player.baseSpeed = -obstacle.body.velocity.x;
         if ((player.isRolling) && (obstacle.isDestructible)) {
             obstacle.kill();

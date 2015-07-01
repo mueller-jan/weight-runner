@@ -13,6 +13,7 @@ var Obstacle = function(game, x, y, isDestructible)
     this.outOfBoundsKill = true;
     this.body.allowGravity = false;
     this.body.immovable = true;
+    this.body.drag = -200;
     this.events.onRevived.add(this.onRevived, this);
 };
 
