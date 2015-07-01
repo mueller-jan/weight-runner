@@ -24,5 +24,10 @@ Introduction.prototype.show = function() {
 };
 
 Introduction.prototype.hide = function() {
-    this.game.add.tween(this).to({y: -1000}, 1000, Phaser.Easing.Bounce.Out, true);
+    var hideTween = this.game.add.tween(this).to({y: -1000}, 1000, Phaser.Easing.Bounce.Out, true);
+    hideTween.onComplete.add(this.setShownToFalse, this);
 };
+
+Introduction.prototype.setShownToFalse = function() {
+    this.isShown = false;
+}

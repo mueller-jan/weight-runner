@@ -49,6 +49,7 @@ Runner.MainMenu.prototype = {
 
         //Einführung
         this.introduction = new Introduction(this.game);
+        this.introduction.priorityID = 5;
     },
 
     addButton: function(x, y, text, callback) {
@@ -60,22 +61,31 @@ Runner.MainMenu.prototype = {
     },
 
     startGame: function() {
-        Runner.menuClick.play();
-        this.game.state.start('Game');
+        if (!this.introduction.isShown) {
+            Runner.menuClick.play();
+            this.game.state.start('Game');
+        }
     },
 
     loadLevelMenu: function() {
-        Runner.menuClick.play();
-        this.state.start('LevelsMenu');
+        if (!this.introduction.isShown) {
+            Runner.menuClick.play();
+            this.state.start('LevelsMenu');
+        }
     },
 
     loadSettingsMenu: function() {
-        Runner.menuClick.play();
-        this.state.start('SettingsMenu');
+        if (!this.introduction.isShown) {
+            Runner.menuClick.play();
+            this.state.start('SettingsMenu');
+        }
     },
 
     showIntroduction: function() {
-      this.introduction.show();
+        if (!this.introduction.isShown) {
+            Runner.menuClick.play();
+            this.introduction.show();
+        }
     },
 
     update: function () {
