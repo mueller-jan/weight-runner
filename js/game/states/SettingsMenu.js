@@ -27,10 +27,10 @@ Runner.SettingsMenu.prototype = {
         this.game.world.add(this.humanPlayer);
 
         // Header
-        var header = this.add.text(this.game.width / 2, this.game.height / 5, "Settings", {
-            font: "bold 90px Arial",
-            fill: "#FF4136",
-            stroke: "#FFFFFF",
+        var header = this.add.text(this.game.width/2, this.game.height / 8, "Settings", {
+            font: "bold 60px Fredoka One",
+            fill: "#FFF",
+            stroke: "#000",
             strokeThickness: 3
         });
         header.anchor.setTo(0.5, 0.5);
@@ -42,12 +42,7 @@ Runner.SettingsMenu.prototype = {
 
         var state = this.isSound ? "ON" : "OFF";
         this.soundBtnStartText = "Sound is ";
-        this.soundBtnText = this.add.text(this.game.width / 2, 250, this.soundBtnStartText + state, {
-            font: "bold 36px Arial",
-            fill: "#FF4136",
-            stroke: "#FFFFFF",
-            strokeThickness: 3
-        });
+        this.soundBtnText = this.add.text(this.game.width / 2, 250, this.soundBtnStartText + state, { font: "bold 22px Fredoka One", fill: "#FFF", stroke: "#000", strokeThickness: 3 });
 
         this.soundBtnText.anchor.setTo(0.5, 0.5);
         this.game.state.states['Game'].setSoundEnabled(this.isSound);
@@ -55,21 +50,15 @@ Runner.SettingsMenu.prototype = {
         // Backbutton
         this.addButton(this.game.width / 2, (this.game.height - this.game.height / 6), "Back", this.loadMainMenu, 'button')
 
-
     },
 
     addButton: function (x, y, text, callback, btnId) {
         var btn = this.add.button(x, y, btnId, callback, this);
         btn.anchor.setTo(0.5, 0.5);
-        btn.scale.setTo(0.6, 0.5);
+        btn.scale.setTo(0.6, 0.6);
         btn.name = text;
 
-        var txt = this.add.text(x, y, text, {
-            font: "bold 36px Arial",
-            fill: "#FF4136",
-            stroke: "#FFFFFF",
-            strokeThickness: 3
-        });
+        var txt = this.add.text(x, y, text, { font: "bold 22px Fredoka One", fill: "#FFF", stroke: "#000", strokeThickness: 3 });
         txt.anchor.setTo(0.5, 0.5);
     },
 

@@ -12,7 +12,7 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
     this.isShown = true;
     var bmd, badge, background, gameoverString, gameoverText, scoreText, highScoreText, newHighScoreText, startText;
 
-    var style = { font: "20px Arial", fill: "#fff", align: "center" };
+    var style = { font: "bold 20px Fredoka One", fill: "#fff", align: "center" , stroke: "#000", strokeThickness: 3};
 
     bmd = this.game.add.bitmapData(this.game.width, this.game.height);
     bmd.ctx.fillStyle = '#000';
@@ -31,32 +31,10 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
             badge = this.game.add.sprite(0, 100, 'badge_level_failed');
             gameoverString = 'Goal weight not reached.';
         }
-        //var isNewHighScore = false;
-        //var highscore = localStorage.getItem('highscore');
-        //if(!highscore || highscore > weight) {
-        //    isNewHighScore = true;
-        //    highscore = weight;
-        //    localStorage.setItem('highscore', highscore);
-        //}
     } else {
         badge = this.game.add.sprite(0, 100, 'badge_level_failed');
         gameoverString = 'Level end not reached.';
     }
-
-    //if(isNewHighScore) {
-    //    newHighScoreText = this.game.add.text(0, 100, 'New best weight!', style);
-    //    newHighScoreText.x = gameoverText.x + gameoverText.width + 40;
-    //    newHighScoreText.angle = 45;
-    //    this.add(newHighScoreText);
-    //}
-    //
-    //scoreText = this.game.add.text(0, 200, 'Your reached a weight of: ' + weight, style);
-    //scoreText.x = this.game.width / 2 - (scoreText.width / 2);
-    //this.add(scoreText);
-    //
-    //highScoreText = this.game.add.text(0, 250, 'Your best weight: ' + highscore, style);
-    //highScoreText.x = this.game.width / 2 - (highScoreText.width / 2);
-    //this.add(highScoreText);
 
     badge.scale.set(0.5);
     badge.x =  this.game.width/2 - (badge.width / 2);

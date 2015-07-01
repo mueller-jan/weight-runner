@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html>
-
-<head>
     <title>Weight-Runner</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="minimal-ui">
@@ -23,6 +21,7 @@
     <script src="js/game/prefabs/EnemyPlayer.js"></script>
     <script src="js/game/prefabs/Explosion.js"></script>
     <script src="js/game/prefabs/ScoreBoard.js"></script>
+    <script src="js/game/prefabs/Introduction.js"></script>
     <script src="js/game/prefabs/GoalFlag.js"></script>
     <script src="js/game/prefabs/PositiveWeightBar.js"></script>
     <script src="js/game/prefabs/NegativeWeightBar.js"></script>
@@ -30,11 +29,11 @@
     <script src="js/game/states/SettingsMenu.js"></script>
 
     <!-- include fonts-->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-
+    <link href='http://fonts.googleapis.com/css?family=Fredoka+One' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
+
 <script type="text/javascript">
     (function () {
         var game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameContainer');
@@ -46,9 +45,15 @@
         game.state.add('LevelsMenu', Runner.LevelsMenu);
         game.state.add('SettingsMenu', Runner.SettingsMenu);
         game.state.start('Boot');
+
+        WebFontConfig = {
+            //Google Fonts die geladen werden sollen
+            google: {
+                families: ['Fredoka One']
+            }
+        };
     })();
 </script>
-
 <div id="gameContainer"></div>
 
 </body>
