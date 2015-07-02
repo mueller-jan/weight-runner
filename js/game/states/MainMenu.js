@@ -51,6 +51,9 @@ Runner.MainMenu.prototype = {
         //Einführung
         this.introduction = new Introduction(this.game);
         this.introduction.priorityID = 5;
+        //Hintergrundmusik starten
+        Runner.backgroundMenu.play();
+
     },
 
     addButton: function(x, y, text, callback) {

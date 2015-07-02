@@ -108,6 +108,7 @@ Runner.Game.prototype = {
         this.positiveWeightBar.createCropRectangle();
         this.negativeWeightBar.createCropRectangle();
 
+        Runner.backgroundMenu.stop();
         //Hintergrundmusik starten
         Runner.backgroundMusic.play();
 
