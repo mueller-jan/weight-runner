@@ -3,9 +3,9 @@
 Runner.Game = function () {
     console.log('init');
     this.startingLevel = 'level_1';
-    this.backgroundName = 'background';
-    this.midgroundName = 'midground';
-    this.groundName = 'ground';
+    this.backgroundName = 'backgroundFullStreet';
+    this.midgroundName = 'midgroundFullStreet';
+    this.groundName = 'groundStreet';
 };
 
 Runner.Game.prototype = {
