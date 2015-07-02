@@ -62,8 +62,8 @@ Runner.Preloader.prototype = {
         this.load.audio('menuClick', 'assets/audio/menuClick.wav');
         this.load.audio('obstacleDestroy', 'assets/audio/obstacleDestroy2.wav');
         this.load.audio('roll', 'assets/audio/roll.wav');
-        this.load.audio('backgroundMusic', 'assets/audio/backgroundMusic.wav');
-        this.load.audio('backgroundMenu', 'assets/audio/menuBackground.wav');
+        this.load.audio('backgroundMusic', 'assets/audio/backgroundMusic.ogg');
+        this.load.audio('backgroundMenu', 'assets/audio/menuBackground.ogg');
 
         // Sounds
         Runner.playerJump = this.game.add.audio('playerJump');
