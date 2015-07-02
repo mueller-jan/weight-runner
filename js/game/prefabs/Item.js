@@ -20,6 +20,6 @@ Item.prototype.constructor = Item;
 
 Item.prototype.onRevived = function() {
     this.body.velocity.x = -200;
-    var r = Math.floor(Math.random() * 2);
+    var r = Math.floor(Math.random() * 3);
     this.frame = r;
 };
