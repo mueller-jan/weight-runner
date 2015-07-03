@@ -257,7 +257,8 @@ Runner.Game.prototype = {
         //Je nach Score verschiebt sich das Weightboar positiv oder negativ
         if(this.score >= 10) {
             this.positiveWeightBar.updateWeight(this.score);
-        }else{
+        }
+        if(this.score <= 10){
             this.negativeWeightBar.updateWeight(this.score);
         }
 
