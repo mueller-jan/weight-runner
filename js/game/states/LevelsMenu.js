@@ -66,7 +66,7 @@ Runner.LevelsMenu.prototype = {
         }
 
         // Header
-        var header = this.add.text(this.game.width/2, this.game.height / 8, "Settings", {
+        var header = this.add.text(this.game.width/2, this.game.height / 8, "Levels", {
             font: "bold 60px Fredoka One",
             fill: "#FFF",
             stroke: "#000",

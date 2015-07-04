@@ -2,7 +2,7 @@
 
 Runner.Game = function () {
     console.log('init');
-    this.startingLevel = 2;
+    this.startingLevel = 1;
     this.backgroundName = 'backgroundFullStreet';
     this.midgroundName = 'midgroundFullStreet';
     this.groundName = 'groundStreet';

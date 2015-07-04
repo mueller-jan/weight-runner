@@ -105,12 +105,11 @@ Runner.Preloader.prototype = {
 
     update: function() {
         //warten bis Sound decoded ist, bevor es zum MainMenu weitergeht
-        //if (this.cache.isSoundDecoded('gameMusic') && this.ready == true)
-            if (this.ready)
-            {
-                this.state.start('MainMenu');
-            }
-        },
+        if (this.cache.isSoundDecoded('backgroundMenu') && this.ready)
+        {
+            this.state.start('MainMenu');
+        }
+    },
 
     onLoadComplete: function() {
         this.ready = true;

@@ -51,7 +51,8 @@ Runner.MainMenu.prototype = {
         //Einführung
         this.introduction = new Introduction(this.game);
         //Hintergrundmusik starten
-        Runner.backgroundMenu.play();
+        if (!Runner.backgroundMenu.isPlaying)
+            Runner.backgroundMenu.play();
 
     },
 
