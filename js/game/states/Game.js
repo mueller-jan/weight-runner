@@ -2,7 +2,7 @@
 
 Runner.Game = function () {
     console.log('init');
-    this.startingLevel = 'level_1';
+    this.startingLevel = 2;
     this.backgroundName = 'backgroundFullStreet';
     this.midgroundName = 'midgroundFullStreet';
     this.groundName = 'groundStreet';
@@ -11,7 +11,7 @@ Runner.Game = function () {
 Runner.Game.prototype = {
     create: function () {
         // Level laden
-        this.loadLevel(this.startingLevel);
+        this.loadLevel('level_' + this.startingLevel);
 
         this.spawnPositionX = this.game.width + 64;
 
@@ -463,7 +463,7 @@ Runner.Game.prototype = {
     },
 
     showScoreboard: function () {
-        this.scoreboard.show(this.score, this.isLevelEndReached(), this.scoreReached());
+        this.scoreboard.show(this.score, this.isLevelEndReached(), this.scoreReached(), this.startingLevel);
     },
 
     setSoundEnabled: function (state) {

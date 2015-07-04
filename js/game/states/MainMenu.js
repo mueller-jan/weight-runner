@@ -41,7 +41,7 @@ Runner.MainMenu.prototype = {
         var isOn = localStorage.getItem("weight_runner_is_sound_on");
 
         if (isOn != null) {
-            this.game.state.states['SettingsMenu'].isSound = isOn === "true" ? true : false;
+            this.game.state.states['SettingsMenu'].isSound = isOn === "true";
         }
         else {
             this.game.state.states['SettingsMenu'].isSound = true;
@@ -50,7 +50,6 @@ Runner.MainMenu.prototype = {
 
         //Einführung
         this.introduction = new Introduction(this.game);
-        this.introduction.priorityID = 5;
         //Hintergrundmusik starten
         Runner.backgroundMenu.play();
 

@@ -27,19 +27,20 @@ Runner.LevelsMenu.prototype = {
         this.game.world.add(this.humanPlayer);
 
         // Load localstorage variable last level
-        var lastLevel = localStorage.getItem("weight_runner_last_level");
+        this.lastLevel = localStorage.getItem("weight_runner_last_level");
 
-        if (lastLevel != null) {
-            this.lastLevel = parseInt(localStorage.getItem("weight_runner_last_level"));
+        if (this.lastLevel != null) {
+            this.lastLevel = localStorage.getItem("weight_runner_last_level");
         }
         else {
-            localStorage.setItem("weight_runner_last_level", "1")
+            localStorage.setItem("weight_runner_last_level", 1);
             this.lastLevel = 1;
         }
 
         // Buttons
         var startY = 250;
         var imageName = null;
+
         for (var i = 1; i <= this.maxLevels; i++) {
             if (i <= this.lastLevel) {
                 imageName = 'button_level';
@@ -92,7 +93,7 @@ Runner.LevelsMenu.prototype = {
     loadLevel: function (button) {
         Runner.menuClick.play();
         if (parseInt(button.name) <= this.lastLevel) {
-            this.game.state.states['Game'].startingLevel = 'level_' + button.name;
+            this.game.state.states['Game'].startingLevel = parseInt(button.name);
             this.game.state.states['Game'].groundName = 'groundStreet';
             this.game.state.states['Game'].backgroundName = 'backgroundFullStreet';
             this.game.state.states['Game'].midgroundName = 'midgroundFullStreet';

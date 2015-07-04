@@ -8,9 +8,11 @@ var Scoreboard = function(game) {
 Scoreboard.prototype = Object.create(Phaser.Group.prototype);
 Scoreboard.prototype.constructor = Scoreboard;
 
-Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
+Scoreboard.prototype.show = function(weight, endReached, goalweightReached, currentLevel) {
     this.isShown = true;
-    var bmd, badge, background, gameoverString, gameoverText, scoreText, highScoreText, newHighScoreText, startText;
+    this.levelComplete = endReached && goalweightReached;
+    this.currentLevel = currentLevel;
+    var bmd, badge, background, gameoverString, gameoverText, startText, lastLevel;
 
     var style = { font: "bold 20px Fredoka One", fill: "#fff", align: "center" , stroke: "#000", strokeThickness: 3};
 
@@ -27,6 +29,10 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
     if (endReached) {
         if (goalweightReached) {
             badge = this.game.add.sprite(0, 100, 'badge_level_completed');
+            lastLevel = parseInt(localStorage.getItem("weight_runner_last_level"));
+            if (lastLevel === this.currentLevel) {
+                localStorage.setItem("weight_runner_last_level", currentLevel + 1);
+            }
         } else {
             badge = this.game.add.sprite(0, 100, 'badge_level_failed');
             gameoverString = 'Goal weight not reached.';
@@ -61,6 +67,9 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached) {
 };
 
 Scoreboard.prototype.restart = function() {
+    if (this.levelComplete)
+        this.game.state.states['Game'].startingLevel = this.currentLevel + 1;
+
     this.game.state.start('Game', true, false);
 };
 
