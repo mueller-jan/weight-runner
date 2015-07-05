@@ -88,6 +88,7 @@ Runner.Preloader.prototype = {
         Runner.maxVolumeMenuClick= 0.5;
         Runner.maxVolumeRoll = 0.3;
         Runner.maxVolumeBackgroundMusic = 1;
+        Runner.maxVolumeMenuBackgroundMusic = 1;
 
 
         this.load.text('level', 'assets/data/level.json');

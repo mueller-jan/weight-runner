@@ -496,6 +496,9 @@ Runner.Game.prototype = {
 
         Runner.backgroundMusic.volume= state ?  Runner.maxVolumeBackgroundMusic : 0;
         Runner.backgroundMusic.mute = !state;
+
+        Runner.backgroundMenu.volume= state ?  Runner.maxVolumeMenuBackgroundMusic : 0;
+        Runner.backgroundMenu.mute = !state;
     },
 
     loadLevel : function(levelName){
