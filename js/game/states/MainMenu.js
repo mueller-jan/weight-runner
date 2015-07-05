@@ -38,15 +38,8 @@ Runner.MainMenu.prototype = {
         this.addButton(this.game.width/2, 400, 'Settings', this.loadSettingsMenu);
         this.addButton(this.game.width/2, 500, 'How to play', this.showIntroduction);
 
-        var isOn = localStorage.getItem("weight_runner_is_sound_on");
-
-        if (isOn != null) {
-            this.game.state.states['SettingsMenu'].isSound = isOn === "true";
-        }
-        else {
-            this.game.state.states['SettingsMenu'].isSound = true;
-        }
-        this.game.state.states['Game'].setSoundEnabled(this.game.state.states['SettingsMenu'].isSound);
+        var isOn = localStorage.getItem("weight_runner_is_sound_on") || 'true';
+        this.game.sound.mute = (isOn != 'true');
 
         //Einführung
         this.introduction = new Introduction(this.game);

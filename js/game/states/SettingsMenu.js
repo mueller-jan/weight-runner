@@ -41,12 +41,12 @@ Runner.SettingsMenu.prototype = {
         btn.anchor.setTo(0.5, 0.5);
         btn.scale.setTo(0.6, 0.5);
 
-        var state = this.isSound ? "ON" : "OFF";
-        this.soundBtnStartText = "Sound is ";
+        this.isSound = localStorage.getItem("weight_runner_is_sound_on");
+        var state = this.isSound === 'true' ? "ON" : "OFF";
+        this.soundBtnStartText = 'Sound is ';
         this.soundBtnText = this.add.text(this.game.width / 2, 250, this.soundBtnStartText + state, { font: "bold 22px Fredoka One", fill: "#FFF", stroke: "#000", strokeThickness: 3 });
 
         this.soundBtnText.anchor.setTo(0.5, 0.5);
-        this.game.state.states['Game'].setSoundEnabled(this.isSound);
 
         // Backbutton
         this.addButton(this.game.width / 2, (this.game.height - this.game.height / 6), "Back", this.loadMainMenu, 'button')
@@ -64,10 +64,10 @@ Runner.SettingsMenu.prototype = {
     },
 
     toggleSound: function () {
-        this.isSound = !this.isSound;
-        var state = this.isSound ? "ON" : "OFF";
+        this.isSound = this.isSound === 'true' ? 'false' : 'true';
+        var state = this.isSound === 'true' ? "ON" : "OFF";
         this.soundBtnText.setText(this.soundBtnStartText + state);
-        this.game.state.states['Game'].setSoundEnabled(this.isSound);
+        this.game.sound.mute = this.isSound == 'false';
         localStorage.setItem("weight_runner_is_sound_on", this.isSound);
         Runner.menuClick.play();
     },

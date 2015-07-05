@@ -285,6 +285,7 @@ Runner.Game.prototype = {
     shutdown: function () {
         console.log('shutting down');
         this.levelGenerator.timer.destroy();
+        Runner.backgroundMusic.stop();
     },
 
     generateLevel: function () {
@@ -464,38 +465,6 @@ Runner.Game.prototype = {
 
     showScoreboard: function () {
         this.scoreboard.show(this.score, this.isLevelEndReached(), this.scoreReached(), this.startingLevel);
-    },
-
-    setSoundEnabled: function (state) {
-        Runner.playerJump.volume = state ? Runner.maxVolumePlayerJump : 0;
-        Runner.playerJump.mute = !state;
-
-        Runner.enemyJump.volume = state ? Runner.maxVolumeEnemyJump : 0;
-        Runner.enemyJump.mute = !state;
-
-        Runner.collectBadItem.volume= state ? Runner.maxVolumeCollectBadItem : 0;
-        Runner.collectBadItem.mute = !state;
-
-        Runner.collectGoodItem.volume= state ? Runner.maxVolumeCollectGoodItem: 0;
-        Runner.collectGoodItem.mute = !state;
-
-        Runner.hitEnemy.volume= state ? Runner.maxVolumeHitEnemy: 0;
-        Runner.hitEnemy.mute = !state;
-
-        Runner.menuClick.volume= state ? Runner.maxVolumeMenuClick: 0;
-        Runner.menuClick.mute = !state;
-
-        Runner.obstacleDestroy.volume= state ? Runner.maxVolumeObstacleDestroy: 0;
-        Runner.obstacleDestroy.mute = !state;
-
-        Runner.deathSound.volume= state ? Runner.maxVolumeDeathSound: 0;
-        Runner.deathSound.mute = !state;
-
-        Runner.rollSound.volume= state ?  Runner.maxVolumeRoll : 0;
-        Runner.rollSound.mute = !state;
-
-        Runner.backgroundMusic.volume= state ?  Runner.maxVolumeBackgroundMusic : 0;
-        Runner.backgroundMusic.mute = !state;
     },
 
     loadLevel : function(levelName){

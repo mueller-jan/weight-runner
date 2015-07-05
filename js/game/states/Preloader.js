@@ -78,17 +78,17 @@ Runner.Preloader.prototype = {
         Runner.backgroundMenu = this.game.add.audio('backgroundMenu');
         Runner.backgroundMusic = this.game.add.audio('backgroundMusic');
 
-        Runner.maxVolumePlayerJump = 0.5;
-        Runner.maxVolumeEnemyJump = 0.5;
-        Runner.maxVolumeCollectBadItem = 0.5;
-        Runner.maxVolumeCollectGoodItem = 0.3;
-        Runner.maxVolumeObstacleDestroy= 0.3;
-        Runner.maxVolumeDeathSound= 0.5;
-        Runner.maxVolumeHitEnemy= 0.5;
-        Runner.maxVolumeMenuClick= 0.5;
-        Runner.maxVolumeRoll = 0.3;
-        Runner.maxVolumeBackgroundMusic = 1;
-
+        Runner.playerJump.volume = 0.5;
+        Runner.enemyJump.volume = 0.5;
+        Runner.collectBadItem.volume = 0.5;
+        Runner.collectGoodItem.volume = 0.3;
+        Runner.deathSound.volume = 0.5;
+        Runner.hitEnemy.volume = 0.5;
+        Runner.menuClick.volume = 0.5;
+        Runner.obstacleDestroy.volume = 0.3;
+        Runner.rollSound.volume = 0.3;
+        Runner.backgroundMenu.volume = 1;
+        Runner.backgroundMusic.volume = 1;
 
         this.load.text('level', 'assets/data/level.json');
         this.load.text('level_1', 'assets/data/level_1.json');
