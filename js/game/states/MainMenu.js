@@ -39,7 +39,7 @@ Runner.MainMenu.prototype = {
         this.addButton(this.game.width / 2, 500, 'How to play', this.showIntroduction);
 
         var isOn = localStorage.getItem("weight_runner_is_sound_on") || 'true';
-        this.game.sound.mute = (isOn != 'true');
+        this.game.sound.mute = isOn != 'true';
 
         //Einführung
         this.introduction = new Introduction(this.game);

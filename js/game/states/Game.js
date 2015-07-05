@@ -172,11 +172,7 @@ Runner.Game.prototype = {
     handleEnemyMovement: function () {
         this.enemies.forEachAlive(function (enemy) {
             enemy.moveLeft();
-
-            //Gegner sollen zufällig springen
-            var r = this.game.rnd.integer() % 100;
-            if (r === 1)
-                enemy.jump();
+            enemy.jump();
         }, this);
     },
 
@@ -306,7 +302,7 @@ Runner.Game.prototype = {
                         this.createItem(this.spawnPositionX, currentElement[i].y, false);
                         break;
                     case 4:
-                        this.createEnemy(this.spawnPositionX, currentElement[i].y);
+                        this.createEnemy(this.spawnPositionX, currentElement[i].y, 100);
                         break;
                     case 5:
                         this.createGoalFlag(this.spawnPositionX, currentElement[i].y);
@@ -357,14 +353,14 @@ Runner.Game.prototype = {
 
     },
 
-    createEnemy: function (x, y) {
+    createEnemy: function (x, y, jumpInterval) {
         x = x || this.spawnPositionX;
         y = y || 400;
 
         //Obstacles recyclen
         var enemy = this.enemies.getFirstExists(false);
         if (!enemy) {
-            enemy = new EnemyPlayer(this.game, 0, 0);
+            enemy = new EnemyPlayer(this.game, 0, 0, jumpInterval);
             this.enemies.add(enemy);
         }
         enemy.reset(x, y);
