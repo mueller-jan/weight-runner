@@ -360,7 +360,7 @@ Runner.Game.prototype = {
         //Obstacles recyclen
         var enemy = this.enemies.getFirstExists(false);
         if (!enemy) {
-            enemy = new EnemyPlayer(this.game, 0, 0, jumpInterval);
+            enemy = new EnemyPlayer(this.game, 0, 0, 100);
             this.enemies.add(enemy);
         }
         enemy.reset(x, y);
