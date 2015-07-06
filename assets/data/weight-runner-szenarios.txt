@@ -209,6 +209,17 @@ Szenario8 (Filigrane Treppe, Schwierigkeit 4)
     [{"y": 225, "type": 0},{"y": 175, "type": 2}, {"y": 125, "type": 2},{"y": 450, "type": 3}],
     [{"y": 225, "type": 0},{"y": 175, "type": 2}, {"y": 125, "type": 2}],
     [{"y": 225, "type": 0},{"y": 175, "type": 2}, {"y": 125, "type": 2},{"y": 450, "type": 3}],
+	
+	
+	Level Order:
+	
+	Level1: 1 2 3 4 5 6 7 8 2 6 4
+	
+	Level2: 1 4 6 3 8 5 2 7 4 3 6 
+	
+	Level3: 1 8 7 6 2 4 3 5 8 3 2
+
+	Level4: 1 4 6 8 3 7 2 5 3 2 8
 	  
 	  
 	  

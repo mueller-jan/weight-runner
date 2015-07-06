@@ -109,7 +109,7 @@ Runner.Game.prototype = {
         this.negativeWeightBar.createCropRectangle();
 
         //Level-Fortschritt-Text
-        this.progressText = this.game.add.text(600, 40, 'Level-Progress: 0%', style);
+        this.progressText = this.game.add.text(550, 30, 'Level-Progress: 0%', headlineStyle);
 
         Runner.backgroundMenu.stop();
         //Hintergrundmusik starten
