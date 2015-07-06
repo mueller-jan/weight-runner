@@ -312,7 +312,7 @@ Runner.Game.prototype = {
                         this.createItem(this.spawnPositionX, currentElement[i].y, false);
                         break;
                     case 4:
-                        this.createEnemy(this.spawnPositionX, currentElement[i].y, 300);
+                        this.createEnemy(this.spawnPositionX, currentElement[i].y);
                         break;
                     case 5:
                         this.createGoalFlag(this.spawnPositionX, currentElement[i].y);
@@ -359,7 +359,7 @@ Runner.Game.prototype = {
         return obstacle;
     },
 
-    createEnemy: function (x, y, jumpInterval) {
+    createEnemy: function (x, y) {
         x = x || this.spawnPositionX;
         y = y || 400;
 
