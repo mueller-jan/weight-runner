@@ -108,6 +108,9 @@ Runner.Game.prototype = {
         this.positiveWeightBar.createCropRectangle();
         this.negativeWeightBar.createCropRectangle();
 
+        //Level-Fortschritt-Text
+        this.progressText = this.game.add.text(600, 40, 'Level-Progress: 0%', style);
+
         Runner.backgroundMenu.stop();
         //Hintergrundmusik starten
         Runner.backgroundMusic.play();
@@ -285,7 +288,14 @@ Runner.Game.prototype = {
     },
 
     generateLevel: function () {
-        if (this.currentLevelStep < this.levelData.objectData.length) {
+        var levelLength = this.levelData.objectData.length;
+
+        //Level-Fortschritt
+        var progress = Math.floor(this.currentLevelStep / levelLength * 100);
+        if (progress > 100) progress = 100;
+        this.progressText.text = 'Level-Progress: ' + progress + '%';
+
+        if (this.currentLevelStep < levelLength) {
             var currentElement = this.levelData.objectData[this.currentLevelStep];
             for (var i = 0; i < currentElement.length; i++) {
                 switch (currentElement[i].type) {
@@ -302,7 +312,7 @@ Runner.Game.prototype = {
                         this.createItem(this.spawnPositionX, currentElement[i].y, false);
                         break;
                     case 4:
-                        this.createEnemy(this.spawnPositionX, currentElement[i].y, 100);
+                        this.createEnemy(this.spawnPositionX, currentElement[i].y, 300);
                         break;
                     case 5:
                         this.createGoalFlag(this.spawnPositionX, currentElement[i].y);
@@ -347,10 +357,6 @@ Runner.Game.prototype = {
         obstacle.reset(x, y);
         obstacle.revive();
         return obstacle;
-    },
-
-    createObstacleGroup: function (columns, rows) {
-
     },
 
     createEnemy: function (x, y, jumpInterval) {
