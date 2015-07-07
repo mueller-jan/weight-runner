@@ -66,9 +66,7 @@ Runner.Game.prototype = {
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
         //Aktuelles Gewicht und Zielgewicht
-        this.weight = 200;
-        this.maxWeight = this.weight;
-        this.goal = 150;
+        this.getLevelWeight();
 
         //Score und vorheriger Score (benötigt für die Gewichtszählung)
         this.score = 10;
@@ -93,16 +91,13 @@ Runner.Game.prototype = {
         this.start_goal_marker.anchor.y = 0.5;
 
         var style = { font: "bold 17px Fredoka One", fill: "#fff", align: "center" , stroke: "#000", strokeThickness: 3};
-        //var style = {font: "17px Roboto", fill: "#000", align: "center"};
         var headlineStyle = {font: "bold 20px Fredoka One", fill: "#fff", align: "center" , stroke: "#000", strokeThickness: 3};
         this.weightOMeterStart = this.game.add.text(38, 60, "Start", style);
-        //this.weightOMeterStart.anchor.x = 0.5;
 
         this.weightOMeterGoal = this.game.add.text(260, 60, "Ziel", style);
         this.weightOMeterGoal.anchor.x = 0.5;
 
         this.weightOMeterHeadline = this.game.add.text(80, 10, "Weight-O-Meter", headlineStyle);
-        //this.weightOMeterHeadline.anchor.x = 0.5;
         this.weightText = this.game.add.text(115, 60, "weight: " + this.weight, style);
 
         this.positiveWeightBar.createCropRectangle();
@@ -479,5 +474,42 @@ Runner.Game.prototype = {
 
     backToMenu : function() {
         this.game.state.start('MainMenu', true, false);
+    },
+
+    getLevelWeight : function(){
+
+        switch(this.startingLevel){
+
+            case 1:
+                this.weight = 165;
+                this.maxWeight = this.weight;
+                this.goal = 140;
+                break;
+
+            case 2:
+                this.weight = 145;
+                this.maxWeight = this.weight;
+                this.goal = 120;
+                break;
+
+            case 3:
+                this.weight = 125;
+                this.maxWeight = this.weight;
+                this.goal = 100;
+                break;
+
+            case 4:
+                this.weight = 105;
+                this.maxWeight = this.weight;
+                this.goal = 80;
+                break;
+
+            default:
+                this.weight = 160;
+                this.maxWeight = this.weight;
+                this.goal = 140;
+        }
+
+
     }
 };
