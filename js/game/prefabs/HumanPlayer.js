@@ -12,7 +12,7 @@ var HumanPlayer = function(game, x, y) {
 
     this.baseSpeed = 0;
     this.speedX = 50;
-    this.speedY = 280;
+    this.speedY = 291;
 
     this.events.onAnimationComplete.add(function() {
         this.animations.play('run');
