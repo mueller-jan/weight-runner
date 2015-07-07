@@ -94,7 +94,7 @@ Runner.Game.prototype = {
         var headlineStyle = {font: "bold 20px Fredoka One", fill: "#fff", align: "center" , stroke: "#000", strokeThickness: 3};
         this.weightOMeterStart = this.game.add.text(38, 60, "Start", style);
 
-        this.weightOMeterGoal = this.game.add.text(260, 60, "Ziel", style);
+        this.weightOMeterGoal = this.game.add.text(260, 60, "Goal", style);
         this.weightOMeterGoal.anchor.x = 0.5;
 
         this.weightOMeterHeadline = this.game.add.text(80, 10, "Weight-O-Meter", headlineStyle);
