@@ -63,6 +63,7 @@ Runner.MainMenu.prototype = {
     startGame: function () {
         if (!this.introduction.isShown) {
             Runner.menuClick.play();
+            this.game.state.states['Game'].startingLevel = 1;
             this.game.state.start('Game');
         }
     },
