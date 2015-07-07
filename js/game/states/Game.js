@@ -81,11 +81,18 @@ Runner.Game.prototype = {
         this.weightOMeterBackground = this.game.add.image(30, 47, 'weightOMeterBackground');
         this.weightOMeterBackground.anchor.y = 0.5;
 
+        this.yellowWeightBar = new PositiveWeightBarYellow(this.game, 56, 46.5);
+        this.game.world.add(this.yellowWeightBar);
+        this.yellowWeightBar.createCropRectangle();
+
         this.positiveWeightBar = new PositiveWeightBar(this.game, 56, 46.5);
         this.game.world.add(this.positiveWeightBar);
+        this.positiveWeightBar.createCropRectangle();
 
         this.negativeWeightBar = new NegativeWeightBar(this.game, 56, 46.5);
         this.game.world.add(this.negativeWeightBar);
+        this.negativeWeightBar.createCropRectangle();
+
 
         this.start_goal_marker = this.game.add.image(30, 47, 'start_goal_marker');
         this.start_goal_marker.anchor.y = 0.5;
@@ -99,9 +106,6 @@ Runner.Game.prototype = {
 
         this.weightOMeterHeadline = this.game.add.text(80, 10, "Weight-O-Meter", headlineStyle);
         this.weightText = this.game.add.text(115, 60, "weight: " + this.weight, style);
-
-        this.positiveWeightBar.createCropRectangle();
-        this.negativeWeightBar.createCropRectangle();
 
         //Level-Fortschritt-Text
         this.progressText = this.game.add.text(550, 20, 'Level-Progress: 0%', headlineStyle);
@@ -250,9 +254,16 @@ Runner.Game.prototype = {
         console.log(this.score);
 
         //Je nach Score verschiebt sich das Weightboar positiv oder negativ
-        if(this.score >= 10) {
-            this.positiveWeightBar.updateWeight(this.score);
+        if(this.score >= 10 && this.score < 90) {
+            this.yellowWeightBar.updateWeight(this.score);
         }
+
+        if(this.score >= 90){
+            this.positiveWeightBar.updateWeight(this.score);
+        }else{
+            this.positiveWeightBar.resetWeightbar();
+        }
+
         if(this.score <= 10){
             this.negativeWeightBar.updateWeight(this.score);
         }

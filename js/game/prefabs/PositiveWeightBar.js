@@ -26,3 +26,9 @@ PositiveWeightBar.prototype.updateWeight = function(score){
     this.crop(this.widthRectangle);
 
 }
+
+PositiveWeightBar.prototype.resetWeightbar = function(){
+    this.widthRectangle.width = 0;
+
+    this.crop(this.widthRectangle);
+};

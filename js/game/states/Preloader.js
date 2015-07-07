@@ -34,7 +34,7 @@ Runner.Preloader.prototype = {
         this.load.image('start_goal_marker', 'assets/images/start_goal.png');
         this.load.image('positiveWeightBar', 'assets/images/positiveWeightBar.png');
         this.load.image('negativeWeightBar', 'assets/images/negativeWeightBar.png');
-        //this.load.image('yellowWeightBar', 'assets/images/yellowWeightBar.png');
+        this.load.image('yellowWeightBar', 'assets/images/weightBarYellow.png');
         this.load.image('groundStreet', 'assets/images/tiles/ground_street.png');
         this.load.image('backgroundFullStreet', 'assets/images/tiles/background_full_street.png');
         this.load.image('midgroundFullStreet', 'assets/images/tiles/midground_street.png');
