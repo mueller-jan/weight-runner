@@ -67,8 +67,9 @@ Scoreboard.prototype.show = function(weight, endReached, goalweightReached, curr
 };
 
 Scoreboard.prototype.restart = function() {
-    if (this.levelComplete)
+    if (this.levelComplete && this.currentLevel < 4) {
         this.game.state.states['Game'].startingLevel = this.currentLevel + 1;
+    }
 
     this.game.state.start('Game', true, false);
 };

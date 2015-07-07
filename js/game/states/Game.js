@@ -104,7 +104,9 @@ Runner.Game.prototype = {
         this.negativeWeightBar.createCropRectangle();
 
         //Level-Fortschritt-Text
-        this.progressText = this.game.add.text(550, 30, 'Level-Progress: 0%', headlineStyle);
+        this.progressText = this.game.add.text(550, 20, 'Level-Progress: 0%', headlineStyle);
+        //Anzeige des aktuellen Levels
+        this.currentLevelText = this.game.add.text(550, 50, 'Level: ' + this.startingLevel, headlineStyle);
 
         Runner.backgroundMenu.stop();
         //Hintergrundmusik starten
