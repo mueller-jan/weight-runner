@@ -161,12 +161,12 @@ Runner.Game.prototype = {
     },
 
     handlePlayerCollisions: function() {
-        this.game.physics.arcade.collide(this.humanPlayer, this.enemies, this.enemyHit, null, this);
+        this.game.physics.arcade.collide(this.humanPlayer, this.enemies, this.killPlayer, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.ground, this.groundHit, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.rightWall);
         this.game.physics.arcade.overlap(this.humanPlayer, this.goodItems, this.itemHit, null, this);
         this.game.physics.arcade.overlap(this.humanPlayer, this.badItems, this.itemHit, null, this);
-        this.game.physics.arcade.overlap(this.humanPlayer, this.leftWall, this.enemyHit, null, this);
+        this.game.physics.arcade.overlap(this.humanPlayer, this.leftWall, this.killPlayer, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.destructableObstacles, this.obstacleHit, null, this);
         this.game.physics.arcade.collide(this.humanPlayer, this.obstacles, this.obstacleHit, null, this);
     },
@@ -189,7 +189,6 @@ Runner.Game.prototype = {
         else if (this.cursors.right.isDown) {
             this.humanPlayer.moveRight();
         }
-
         if (this.cursors.up.isDown) {
             this.humanPlayer.jump();
         }
@@ -198,7 +197,7 @@ Runner.Game.prototype = {
         }
     },
 
-    enemyHit: function (player, item) {
+    killPlayer: function (player, item) {
         console.log('enemy hit');
         Runner.deathSound.play();
         this.disablePlayer();
@@ -243,7 +242,7 @@ Runner.Game.prototype = {
         }
 
         if (this.score <= 0) {
-            this.score = 0;
+            this.killPlayer(this.humanPlayer);
         }
 
         //Score wird in Gewicht umgerechnet für das Scoreboard
@@ -259,12 +258,6 @@ Runner.Game.prototype = {
         }
         if(this.score <= 10){
             this.negativeWeightBar.updateWeight(this.score);
-        }
-
-        //Überprüft ob "Gewonnen" oder "GameOver"
-
-        if (this.gameOver()) {
-
         }
 
         //Sound und Animationen für good/badItem
@@ -451,15 +444,6 @@ Runner.Game.prototype = {
         //Überprüfen ob das Scorelimit erreich wurde
         var result = false;
         if (this.score >= 90) {
-            result = true;
-        }
-        return result;
-    },
-
-    gameOver: function () {
-
-        var result = false;
-        if (this.score == 0) {
             result = true;
         }
         return result;
