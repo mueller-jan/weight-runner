@@ -1,5 +1,6 @@
 # Weight-Runner
-This is a project for the module "Media Informatics 2" at the ["Hochschule Bremen"](http://www.hs-bremen.de/).
+This is a project for the module "Media Informatics 2" at the ["Hochschule Bremen"](http://www.hs-bremen.de/). </br>
+Here is a [Demo](https://github.com/cschaf/).
 
 Contributors (alphabetical order):
 * [cschaf](https://github.com/cschaf/)
